@@ -36,3 +36,34 @@
     transform: rotate(360deg);
   }
 }
+
+
+.main__header {
+  height: 30px;
+  background-color:#262651;
+  width: auto;
+}
+.title_text {
+   margin: 0%;
+   color:rgba(38, 246, 38, 0.859);
+   position: absolute;
+   font-family: Verdana, Geneva, Tahoma, sans-serif;
+  left: 3%;
+}
+
+.help_text {
+  position: absolute;
+  top: 4px;
+  right: 5%;
+  color: white;
+}
+
+.main_title {
+  text-align: center;
+
+}
+
+.tab__two {
+  position: absolute;
+  left: 50%;
+}
