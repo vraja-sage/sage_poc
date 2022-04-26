@@ -14,8 +14,9 @@ import {FlatTable,FlatTableHead,FlatTableRow,FlatTableHeader, FlatTableBody, Fla
 import Content from "carbon-react/lib/components/content";
 import { saveAs } from 'file-saver';
 import { GridContainer, GridItem } from "carbon-react/lib/components/grid";
-import Pod from "carbon-react/lib/components/pod"
-import { APIRes } from "./Config/apiRes";
+// import Pod from "carbon-react/lib/components/pod"
+// import { APIRes } from "./Config/apiRes";
+import DisplayReport from "./Components/DisplayReport";
 import './App.css';
 
 function App  () {
@@ -140,7 +141,11 @@ function App  () {
   //   setDisplayLayout(layoutData);
 
   // },[layoutData]);
-
+  let url = new URL(window.location.href);
+  let displayReport = url.searchParams.get("report");
+  if(displayReport == "display"){
+    return (<DisplayReport />);
+  }
   return (
     <React.Fragment>
       <GlobalStyle />
