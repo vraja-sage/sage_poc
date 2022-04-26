@@ -1,1 +1,56 @@
-{"PageTitle":{"gridLevel":{"Grid Level":"4"},"reportHeader":{"Report Header":"TestRH"},"date":{"Date":"TestDD"},"reportStatus":{"Report Status":"InProgress"}},"Reportcontainer":{"gridLevel":{"Grid Level":"4"},"nationalIN":{"National Insurance Number":"TEstIN"},"reportTitle":{"Title":"TestTT"},"extraData":{"More Data":"TEstMD"},"dueIn":{"Due In":"TestDDD"},"action":{"label":"Submit update to HMRC","pre":{"Pre Action":"TestPre"},"post":{"Post Action":"TestPost"},"actionAPI":{"Action API":"TestAction"},"isValidationNeed":{"Is Validation Need":"Yes"}}},"ReportBody":{"gridLevel":{"Grid Level":"6"},"apiURL":{"API URL":"TEstAPIIAIAIA"}}}
+{
+    "PageTitle": {
+      "gridLevel": {
+        "Grid Level": 12
+      },
+      "reportHeader": {
+        "Report Header": "Quarter 2"
+      },
+      "date": {
+        "Date": "26 April - 4 July 2022"
+      },
+      "reportStatus": {
+        "Report Status": "InProgress"
+      }
+    },
+    "Reportcontainer": {
+      "gridLevel": {
+        "Grid Level": 12
+      },
+      "nationalIN": {
+        "National Insurance Number": "AA123456C"
+      },
+      "reportTitle": {
+        "Title": "Wonderland Cakes"
+      },
+      "extraData": {
+        "More Data": "TEstMD"
+      },
+      "dueIn": {
+        "Due In": "35 Days"
+      },
+      "action": {
+        "label": "Submit update to HMRC",
+        "pre": {
+          "Pre Action": ""
+        },
+        "post": {
+          "Post Action": ""
+        },
+        "actionAPI": {
+          "Action API": "api/submitQuarteData"
+        },
+        "isValidationNeed": {
+          "Is Validation Need": "No"
+        }
+      }
+    },
+    "ReportBody": {
+      "gridLevel": {
+        "Grid Level": 12
+      },
+      "apiURL": {
+        "API URL": "api/getQuarterData?id=123456"
+      }
+    }
+  }

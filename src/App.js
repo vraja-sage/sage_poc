@@ -10,13 +10,20 @@ import DynamicForm from "./Components/DynamicForm";
 import {FormFields} from "./Config/FormsFields";
 import { Tabs, Tab } from "carbon-react/lib/components/tabs";
 import Help from "carbon-react/lib/components/help";
+import {FlatTable,FlatTableHead,FlatTableRow,FlatTableHeader, FlatTableBody, FlatTableCell} from "carbon-react/lib/components/flat-table";
+import Content from "carbon-react/lib/components/content";
 import { saveAs } from 'file-saver';
+import { GridContainer, GridItem } from "carbon-react/lib/components/grid";
+import Pod from "carbon-react/lib/components/pod"
+import { APIRes } from "./Config/apiRes";
 import './App.css';
 
 function App  () {
   const [formData, setFormData] = useState({});
   const [layoutData, setLayoutData ] = useState("");
   const [displayLayout, setDisplayLayout] = useState({});
+  // const [preColVal, setPreColVal] = useState(1);
+  let preCol = 1;
   const createLayout = async () => {
     console.info("formData",formData);
 
@@ -25,7 +32,7 @@ function App  () {
       [ JSON.stringify(formData) ], 
       { type: 'text/json;charset=utf-8' });
 
-    saveAs(blobConfig, "hello_world.json");
+    saveAs(blobConfig, "26apr_report_layout.json");
     // const element = document.createElement("a");
     // const textFile = new Blob([JSON.stringify[{"Game" : "Starteaaaaad"}], { type: 'text/json' }]); //pass data from localStorage API to blob
     // console.info("textFile",textFile);
@@ -97,13 +104,33 @@ function App  () {
     //   //}
     // }
   };
-
-  const loadLayout = () => {
-    let iVar = "25apr"
-    import(`./${iVar}.json`).then(res => setLayoutData(res));
-
+  const togglePage = (e) => {
+    if(e == "tab-2") {
+      loadLayout();
+    }
   }
 
+  const loadLayout = () => {
+    let url = new URL(window.location.href);
+    let fileName = url.searchParams.get("layoutName");
+    //let iVar = "25apr"
+    import(`./${fileName}.json`).then(res => setLayoutData(res));
+  }
+
+  const getLayoutcol = (colVal) => {
+    colVal =colVal +1;
+    let retVal = `1 / ${colVal}`;
+    if(colVal < 13) {
+      if(preCol != 1) {
+        colVal  = 13;
+      }
+      retVal = `${preCol} / ${colVal}`;
+      preCol = colVal;
+      return retVal;
+    }
+    preCol = 1;
+    return retVal;
+  }
   // useEffect(() => {
   //   // if(Object.keys(layoutData).length > 0 ){
   //   //   for (let [key, value] of Object.entries(layoutData)) {
@@ -127,7 +154,7 @@ function App  () {
       <h1 className="main_title">Generate Reports for SAGE BUSINESS </h1>
 
       
-      <Tabs size="large" align="left" position="top" m={6}>
+      <Tabs size="large" align="left" onTabChange={togglePage} position="top" m={6} className="tabs_div">
         <Tab errorMessage="error" warningMessage="warning" infoMessage="info" tabId="tab-1" title="Layout Data" key="tab-1">
           <AccordionGroup>
           {Object.keys(FormFields).map((key, index) => (
@@ -157,10 +184,71 @@ function App  () {
             </Box>
           </AccordionGroup> 
         </Tab>
-        <Tab errorMessage="error" warningMessage="warning" infoMessage="info" tabId="tab-2" title="Layout Preview" key="tab-2" className="tab__two">
-          <h3 onClick={loadLayout}>Welcome to Sage Reports</h3>
+        <Tab errorMessage="error" warningMessage="warning"  align="right" infoMessage="info" tabId="tab-2" title="Layout Preview" key="tab-2" className="tab__two">
+          {/* <h3 onClick={loadLayout}>Welcome to Sage Reports</h3>
           {Object.keys(layoutData).length > 0 && Object.keys(layoutData).map(item => <div>{item}</div>
-          )}
+          )} */}
+          <div className="grid_container">
+          {/* <h3 onClick={loadLayout}>Welcome to Sage Reports</h3> */}
+          <GridContainer>
+          {Object.keys(layoutData).length > 0 && Object.keys(layoutData).map((item) => {
+            if(item == "default") {
+              return null;
+            }
+            let gcValue = layoutData[item] && layoutData[item].gridLevel && Object.values(layoutData[item].gridLevel);
+            let gridCol = getLayoutcol(gcValue[0]);
+            return(<>
+              <GridItem alignSelf="stretch" justifySelf="stretch" gridColumn={gridCol} >
+                <div className="grid_headingone">
+                <Content title={item} align="center" variant="secondary">
+                  {item}
+                </Content>   
+                </div>
+              </GridItem> 
+            </>) 
+            
+          })}
+            {/* <GridItem alignSelf="stretch" justifySelf="stretch" className="grid_heading">
+              <div className="grid_headingone">
+                  H1 Heading
+              </div>
+            </GridItem>
+            <GridItem alignSelf="stretch" justifySelf="stretch" className="grid_heading"  gridColumn="1 / 7" >
+              <div className="grid_left">
+                H2 Heading
+              </div>
+            </GridItem>
+            <GridItem alignSelf="stretch" justifySelf="stretch" className="grid_heading"  gridColumn="7 / 13" >
+              <div className="grid_right">
+                  H2 Heading
+                  {/* <Button buttonType="primary" noWrap className="submit_btn">
+                      Submit update to HMRC
+                    </Button> 
+              </div>
+            </GridItem>
+            <GridItem alignSelf="stretch" justifySelf="stretch" >
+              <div className="page_body">
+                Report Body
+               <FlatTable colorTheme="transparent-white" className="table_div">
+              <FlatTableHead>
+                <FlatTableRow>
+                  <FlatTableHeader>Business Expenses</FlatTableHeader>
+                  <FlatTableHeader align="right">Total Expenses</FlatTableHeader>
+                  <FlatTableHeader align="right">Total disallowable</FlatTableHeader>
+                </FlatTableRow>
+              </FlatTableHead>
+              <FlatTableBody>
+                {APIRes.map(row => <FlatTableRow>
+                    <FlatTableCell>{row.BE} </FlatTableCell>
+                    <FlatTableCell align="right">{row.TE}</FlatTableCell>
+                    <FlatTableCell align="right">{row.TD}</FlatTableCell>
+                </FlatTableRow>)}
+              </FlatTableBody>
+            </FlatTable> 
+          </div>
+          </GridItem> */}
+          </GridContainer>
+        </div>
         </Tab>
       </Tabs>
       </CarbonProvider>

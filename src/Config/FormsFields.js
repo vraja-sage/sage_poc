@@ -12,17 +12,29 @@ export const FormFields = {
     //   ]
     // },
     {
+      key: "position",
+      label: "Display Grid Position",
+      type: "select",
+      value: "table",
+      options: [
+        { key: "1", label: "1", value: 1 },
+        { key: "2", label: "2", value: 2 },
+        { key: "3", label: "3", value: 3 },
+        { key: "4", label: "4", value: 4 },
+      ]
+    },
+    {
       key: "gridLevel",
       label: "Grid Level",
       type: "select",
       value: "2",
       options: [
-        { key: "2", label: "2", value: "2" },
-        { key: "4", label: "4", value: "4" },
-        { key: "6", label: "6", value: "6" },
-        { key: "8", label: "8", value: "8" },
-        { key: "10", label: "10", value: "10" },
-        { key: "12", label: "12", value: "12" }
+          // { key: "2", label: "2", value: 2 },
+          { key: "4", label: "4", value: 4 },
+          { key: "6", label: "6", value: 6 },
+          { key: "8", label: "8", value: 8 },
+          // { key: "10", label: "10", value: 10 },
+          { key: "12", label: "12", value: 12 }
       ]
     },
     { key: "reportHeader", label: "Report Header",  type: "text", props: { required: true } },
@@ -39,7 +51,7 @@ export const FormFields = {
       ]
     },
   ],
-  Reportcontainer : [
+  ReportcontainerOne : [
     // {
     //   key: "Component",
     //   label: "Carbon Component",
@@ -51,22 +63,72 @@ export const FormFields = {
     //   ]
     // },
     {
+      key: "position",
+      label: "Display Grid Position",
+      type: "select",
+      value: "table",
+      options: [
+        { key: "1", label: "1", value: 1 },
+        { key: "2", label: "2", value: 2 },
+        { key: "3", label: "3", value: 3 },
+        { key: "4", label: "4", value: 4 },
+      ]
+    },
+    {
+      key: "gridLevel",
+      label: "Grid Level",
+      type: "select",
+      value: "6",
+      options: [
+         // { key: "2", label: "2", value: 2 },
+         { key: "4", label: "4", value: 4 },
+         { key: "6", label: "6", value: 6 },
+         { key: "8", label: "8", value: 8 },
+         // { key: "10", label: "10", value: 10 },
+         { key: "12", label: "12", value: 12 }
+      ]
+    },
+    { key: "reportTitle", label: "Title", type: "text" },
+    { key: "nationalIN", label: "National Insurance Number", type: "text" },
+    { key: "extraData", label: "More Data", type: "text" }
+  ],
+  ReportcontainerTwo : [
+    // {
+    //   key: "Component",
+    //   label: "Carbon Component",
+    //   type: "select",
+    //   value: "h1",
+    //   options: [
+    //     { key: "h1", label: "h1", value: "h1" },
+    //     { key: "h2", label: "h2", value: "h2" },
+    //   ]
+    // },
+    {
+      key: "position",
+      label: "Display Grid Position",
+      type: "select",
+      value: "table",
+      options: [
+        { key: "1", label: "1", value: 1 },
+        { key: "2", label: "2", value: 2 },
+        { key: "3", label: "3", value: 3 },
+        { key: "4", label: "4", value: 4 },
+      ]
+    },
+    {
       key: "gridLevel",
       label: "Grid Level",
       type: "select",
       value: "2",
       options: [
-        { key: "2", label: "2", value: "2" },
-        { key: "4", label: "4", value: "4" },
-        { key: "6", label: "6", value: "6" },
-        { key: "8", label: "8", value: "8" },
-        { key: "10", label: "10", value: "10" },
-        { key: "12", label: "12", value: "12" }
+        // { key: "2", label: "2", value: 2 },
+        { key: "4", label: "4", value: 4 },
+        { key: "6", label: "6", value: 6 },
+        { key: "8", label: "8", value: 8 },
+        // { key: "10", label: "10", value: 10 },
+        { key: "12", label: "12", value: 12 }
       ]
     },
-    { key: "reportTitle", label: "Title", type: "text" },
-    { key: "nationalIN", label: "National Insurance Number", type: "text" },
-    { key: "extraData", label: "More Data", type: "text" },
     { key: "dueIn", label: "Due In", type: "text" },
     { key: "sDeadline", label: "Submission deadline", type: "text" },
     { 
@@ -100,17 +162,29 @@ export const FormFields = {
     //   ]
     // },
     {
+      key: "position",
+      label: "Display Grid Position",
+      type: "select",
+      value: "table",
+      options: [
+        { key: "1", label: "1", value: 1 },
+        { key: "2", label: "2", value: 2 },
+        { key: "3", label: "3", value: 3 },
+        { key: "4", label: "4", value: 4 },
+      ]
+    },
+    {
       key: "gridLevel",
       label: "Grid Level",
       type: "select",
       value: "2",
       options: [
-        { key: "2", label: "2", value: "2" },
-        { key: "4", label: "4", value: "4" },
-        { key: "6", label: "6", value: "6" },
-        { key: "8", label: "8", value: "8" },
-        { key: "10", label: "10", value: "10" },
-        { key: "12", label: "12", value: "12" }
+         // { key: "2", label: "2", value: 2 },
+         { key: "4", label: "4", value: 4 },
+         { key: "6", label: "6", value: 6 },
+         { key: "8", label: "8", value: 8 },
+         // { key: "10", label: "10", value: 10 },
+         { key: "12", label: "12", value: 12 }
       ]
     },
     { key: "apiURL", label: "API URL", type: "text" },
