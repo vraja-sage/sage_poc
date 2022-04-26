@@ -14,14 +14,14 @@ export default function DynamicForm (props) {
   const [isOpen , setIsOpen] = useState(false);
   const [overlayData , setOverlayData] = useState({});
 
-  const getActionData = (propsDa) => {
-    setOverlayData(propsDa)
+  const getActionData = (m, rootKey) => {
+    let propData = { m , rootKey}
+    setOverlayData(propData)
     setIsOpen(true);
   }
   const renderForm = () => {
-    let model = props.model;
-    let defaultValues = props.defaultValues;
-
+    let { model, rootKey, onChange, defaultValues } = props;
+    //console.info("defaultValues",defaultValues);
     let formUI = model.map(m => {
       let key = m.key;
       let type = m.type || "text";
@@ -30,21 +30,6 @@ export default function DynamicForm (props) {
       let value = m.value;
 
       let target = key;
-      value = "" // rowField[target] || "";
-
-      // let input = (
-      //   <input
-      //     {...props}
-      //     className="form-input"
-      //     type={type}
-      //     key={key}
-      //     name={name}
-      //     value={value}
-      //     onChange={e => {
-      //       props.onChange(e, target);
-      //     }}
-      //   />
-      // );
 
       let input = (
       <Textbox 
@@ -53,10 +38,10 @@ export default function DynamicForm (props) {
         type={type}
         key={key}
         name={name}
-        value={value}
+        // value={value}
         label={m.label} labelInline labelWidth={30} 
         onChange={e => {
-          props.onChange(e, target);
+          onChange(e, target, rootKey, m);
         }}
       />);
 
@@ -100,10 +85,10 @@ export default function DynamicForm (props) {
 
         //console.log("Select default: ", value);
         input = (
-          // <FilterableSelect onChange={e => {
-          //     props.onChange(e, m.key);
-          //   }}  label={m.label} labelInline openOnFocus>
-          <FilterableSelect label={m.label} labelInline openOnFocus>
+          <FilterableSelect onChange={e => {
+              onChange(e, target, rootKey, m);
+            }}  label={m.label} labelInline openOnFocus>
+          {/* <FilterableSelect label={m.label} labelInline openOnFocus> */}
             {input}
           </FilterableSelect>
         );
@@ -142,11 +127,9 @@ export default function DynamicForm (props) {
       if(key == "action") {
         return (
           <Box m={1} p={1} >
-            <ButtonToggleGroup label={m.label} labelInline onChange={() => getActionData(m.props)}>
-              <ButtonToggle key={m.label} value={m.label}>
-              Create Button Action
-              </ButtonToggle>
-            </ButtonToggleGroup>
+            <Button onClick={() => getActionData(m, rootKey)}buttonType="tertiary" ml="calc(30% - 24px)">
+              {m.label} - Create Button Action
+            </Button>
           </Box>
         )
       }
@@ -162,13 +145,10 @@ export default function DynamicForm (props) {
     return formUI;
   };
 
-  let title = props.title || "SAGE Report Data";
-  if(isOpen) {
-    return <DialogAction isOpen={isOpen} overlayData={overlayData} setIsOpen={setIsOpen}/>;
-  }
   return (
     <>
     <Box m={1} p={1} >
+      {isOpen && <DialogAction onChange={props.overlayOnChange} overlayData={overlayData} setIsOpen={setIsOpen}/>}
       {renderForm()}
     </Box>
     </>

@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import CarbonProvider from "carbon-react/lib/components/carbon-provider";
 import { Accordion, AccordionGroup,} from "carbon-react/lib/components/accordion";
 import sageTheme from "carbon-react/lib/style/themes/sage";
@@ -10,11 +10,30 @@ import DynamicForm from "./Components/DynamicForm";
 import {FormFields} from "./Config/FormsFields";
 import { Tabs, Tab } from "carbon-react/lib/components/tabs";
 import Help from "carbon-react/lib/components/help";
+import { saveAs } from 'file-saver';
 import './App.css';
 
 function App  () {
-  const [formData, setFormData] = useState({ data :[], current : {} });
-  const createLayout = () => {
+  const [formData, setFormData] = useState({});
+  const [layoutData, setLayoutData ] = useState("");
+  const [displayLayout, setDisplayLayout] = useState({});
+  const createLayout = async () => {
+    console.info("formData",formData);
+
+    Object.entries(formData)
+    const blobConfig = new Blob(
+      [ JSON.stringify(formData) ], 
+      { type: 'text/json;charset=utf-8' });
+
+    saveAs(blobConfig, "hello_world.json");
+    // const element = document.createElement("a");
+    // const textFile = new Blob([JSON.stringify[{"Game" : "Starteaaaaad"}], { type: 'text/json' }]); //pass data from localStorage API to blob
+    // console.info("textFile",textFile);
+    // element.href = URL.createObjectURL(textFile);
+    // element.download = "userFile.json";
+    // document.body.appendChild(element); 
+    // element.click();
+
     // let data = [];
     // if (model.id) {
     //   data = formData.data.filter(d => {
@@ -30,8 +49,26 @@ function App  () {
     //   current: {} // todo
     // });
   };
+  const overlayOnChange = (e, rowObj ) => {
+    let { rootKey, subKey, rowkey, label, subLabel } = rowObj;
+    if(!formData[rootKey]) {
+      formData[rootKey] = {};
+    }
+    if(!formData[rootKey][subKey]) {
+      formData[rootKey][subKey] = { "label" : subLabel };
+    }
+ 
+    formData[rootKey][subKey][rowkey] = { [label] : e.target.value};
+    setFormData(formData);
+  }
 
-  const onChange = (e, key, type = "single") => {
+  const onChange = (e, target, rootKey, m) => {
+    if(!formData[rootKey]) {
+      formData[rootKey] = {};
+    }
+    formData[rootKey][target] = { [m.label] : e.target.value};
+    setFormData(formData);
+    // console.info(e.target.value, "---",target , "====", rootKey , "++++" , m);
     // console.log(rowField, `${key} changed ${e.target.value} type ${type}`);
     // if (type === "single") {
     //   setRowField({...rowField , [key]: e.target.value });
@@ -61,6 +98,22 @@ function App  () {
     // }
   };
 
+  const loadLayout = () => {
+    let iVar = "25apr"
+    import(`./${iVar}.json`).then(res => setLayoutData(res));
+
+  }
+
+  // useEffect(() => {
+  //   // if(Object.keys(layoutData).length > 0 ){
+  //   //   for (let [key, value] of Object.entries(layoutData)) {
+  //   //     console.info(value,"aaaaaaaa",key)
+  //   //   }
+  //   // }
+  //   setDisplayLayout(layoutData);
+
+  // },[layoutData]);
+
   return (
     <React.Fragment>
       <GlobalStyle />
@@ -72,6 +125,8 @@ function App  () {
 
       <CarbonProvider theme={sageTheme}>
       <h1 className="main_title">Generate Reports for SAGE BUSINESS </h1>
+
+      
       <Tabs size="large" align="left" position="top" m={6}>
         <Tab errorMessage="error" warningMessage="warning" infoMessage="info" tabId="tab-1" title="Layout Data" key="tab-1">
           <AccordionGroup>
@@ -80,11 +135,12 @@ function App  () {
             <Box m={1} p={1} >
             <Accordion title={key}>
               <DynamicForm
-              key={formData.current.id}
+              // key={formData.current.id}
               className="headerForm"
-              // title={key}
-              // defaultValues={formData.current}
+              rootKey={key}
+              defaultValues={formData[key]}
               onChange = {onChange}
+              overlayOnChange = {overlayOnChange}
               model={FormFields[key]}
               index = {index}
               formFields = {FormFields}
@@ -102,7 +158,9 @@ function App  () {
           </AccordionGroup> 
         </Tab>
         <Tab errorMessage="error" warningMessage="warning" infoMessage="info" tabId="tab-2" title="Layout Preview" key="tab-2" className="tab__two">
-          <h3>Welcome to Sage Reports</h3>
+          <h3 onClick={loadLayout}>Welcome to Sage Reports</h3>
+          {Object.keys(layoutData).length > 0 && Object.keys(layoutData).map(item => <div>{item}</div>
+          )}
         </Tab>
       </Tabs>
       </CarbonProvider>
