@@ -1,0 +1,92 @@
+.con_text {
+    position: absolute;
+    top: 7%;
+    left: 3%;
+    font-size: 24px;
+}
+
+.date_text {
+    position: absolute;
+    top: 12%;
+    left:  3%;
+    bottom: 1px;
+}
+
+.sage_btn {
+    position: absolute;
+    left: 105%;
+   
+}
+
+
+/* .right_text {
+    position: absolute;
+    right: 5%;
+} */
+
+.cake_text {
+    position: absolute;
+    left: 4%;
+    top: 20%;
+}
+
+
+.insurance_text {
+  position: absolute;
+  left: 4%;
+  top: 22.5%;
+}
+
+.cash_basic {
+    position: absolute;
+    left: 4%;
+    top: 28%;
+}
+
+.sole_text {
+    position: absolute;
+    left: 4%;
+    top: 31%;
+}
+
+.due_text{
+    position: absolute;
+    right: 3%;
+    top: 20%;
+}
+
+.date_text_grid2 {
+    position: absolute;
+    right: 3%;
+}
+
+.sub_buttton{
+    position: absolute;
+    right: 3%;
+    top: 31%;
+}
+
+.grid_one {
+    background: white;
+}
+
+
+/* .grid_heading_one {
+    background: white;
+}
+
+.grid_heading_two {
+    background: white;
+} */
+
+.submit_btn_bottom {
+    position: absolute;
+     right: 3%;
+     top: 110%;
+}
+
+.bottom_button {
+    position: absolute;
+    top: 110.5%;
+    right: 18%;
+}

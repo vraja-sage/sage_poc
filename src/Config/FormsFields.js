@@ -37,19 +37,19 @@ export const FormFields = {
           { key: "12", label: "12", value: 12 }
       ]
     },
-    { key: "reportHeader", label: "Report Header",  type: "text", props: { required: true } },
-    { key: "date", label: "Date", type: "text" },
-    {
-      key: "reportStatus",
-      label: "Report Status",
-      type: "select",
-      value: "Open",
-      options: [
-        { key: "InProgress", label: "InProgress", value: "InProgress" },
-        { key: "Completed", label: "Completed", value: "Completed" },
-        { key: "Open", label: "Open", value: "Open" }
-      ]
-    },
+    // { key: "reportHeader", label: "Report Header",  type: "text", props: { required: true } },
+    // { key: "date", label: "Date", type: "text" },
+    // {
+    //   key: "reportStatus",
+    //   label: "Report Status",
+    //   type: "select",
+    //   value: "Open",
+    //   options: [
+    //     { key: "InProgress", label: "InProgress", value: "InProgress" },
+    //     { key: "Completed", label: "Completed", value: "Completed" },
+    //     { key: "Open", label: "Open", value: "Open" }
+    //   ]
+    // },
   ],
   ReportcontainerOne : [
     // {
@@ -88,9 +88,9 @@ export const FormFields = {
          { key: "12", label: "12", value: 12 }
       ]
     },
-    { key: "reportTitle", label: "Title", type: "text" },
-    { key: "nationalIN", label: "National Insurance Number", type: "text" },
-    { key: "extraData", label: "More Data", type: "text" }
+    // { key: "reportTitle", label: "Title", type: "text" },
+    // { key: "nationalIN", label: "National Insurance Number", type: "text" },
+    // { key: "extraData", label: "More Data", type: "text" }
   ],
   ReportcontainerTwo : [
     // {
@@ -129,26 +129,26 @@ export const FormFields = {
         { key: "12", label: "12", value: 12 }
       ]
     },
-    { key: "dueIn", label: "Due In", type: "text" },
-    { key: "sDeadline", label: "Submission deadline", type: "text" },
-    { 
-      key: "action", label: "Submit update to HMRC", type: "button", value : "Open",  
-      props: {
-        pre :  { key: "preAction", label: "Pre Action", type: "text" },
-        post :  { key: "postAction", label: "Post Action", type: "text" },
-        actionAPI :  { key: "actionAPI", label: "Action API", type: "text" },
-        isValidationNeed : {
-          key: "isValidationNeed",
-          label: "Is Validation Need",
-          type: "select",
-          value: "No",
-          options: [
-            { key: "Yes", label: "Yes", value: "Yes" },
-            { key: "No", label: "No", value: "NO" },
-          ]
-        },
-      }
-    },
+    // { key: "dueIn", label: "Due In", type: "text" },
+    // { key: "sDeadline", label: "Submission deadline", type: "text" },
+    // { 
+    //   key: "action", label: "Submit update to HMRC", type: "button", value : "Open",  
+    //   props: {
+    //     pre :  { key: "preAction", label: "Pre Action", type: "text" },
+    //     post :  { key: "postAction", label: "Post Action", type: "text" },
+    //     actionAPI :  { key: "actionAPI", label: "Action API", type: "text" },
+    //     isValidationNeed : {
+    //       key: "isValidationNeed",
+    //       label: "Is Validation Need",
+    //       type: "select",
+    //       value: "No",
+    //       options: [
+    //         { key: "Yes", label: "Yes", value: "Yes" },
+    //         { key: "No", label: "No", value: "NO" },
+    //       ]
+    //     },
+    //   }
+    // },
   ],
   // ReportHeader : [],
   ReportBody : [

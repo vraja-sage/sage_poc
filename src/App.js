@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, Suspense } from "react";
 import CarbonProvider from "carbon-react/lib/components/carbon-provider";
 import { Accordion, AccordionGroup,} from "carbon-react/lib/components/accordion";
 import sageTheme from "carbon-react/lib/style/themes/sage";
@@ -23,7 +23,7 @@ function App  () {
   const [formData, setFormData] = useState({});
   const [layoutData, setLayoutData ] = useState("");
   const [displayLayout, setDisplayLayout] = useState({});
-  // const [preColVal, setPreColVal] = useState(1);
+
   let preCol = 1;
   const createLayout = async () => {
     console.info("formData",formData);
@@ -132,20 +132,13 @@ function App  () {
     preCol = 1;
     return retVal;
   }
-  // useEffect(() => {
-  //   // if(Object.keys(layoutData).length > 0 ){
-  //   //   for (let [key, value] of Object.entries(layoutData)) {
-  //   //     console.info(value,"aaaaaaaa",key)
-  //   //   }
-  //   // }
-  //   setDisplayLayout(layoutData);
-
-  // },[layoutData]);
-  let url = new URL(window.location.href);
-  let displayReport = url.searchParams.get("report");
-  if(displayReport == "display"){
-    return (<DisplayReport />);
-  }
+  let pageurl = new URL(window.location.href);
+  let displayReport = pageurl.searchParams.get("report");
+  useEffect(() => {
+    let fileName = pageurl.searchParams.get("layoutName") || "";
+    //let iVar = "25apr"
+    fileName && import(`./${fileName}.json`).then(res => setLayoutData(res));
+  },[]);
   return (
     <React.Fragment>
       <GlobalStyle />
@@ -156,6 +149,14 @@ function App  () {
       </div>
 
       <CarbonProvider theme={sageTheme}>
+      { 
+      (displayReport == "display")
+      ? 
+      <>
+        <DisplayReport layoutData={layoutData}/>
+      </>
+      :
+      <>
       <h1 className="main_title">Generate Reports for SAGE BUSINESS </h1>
 
       
@@ -256,6 +257,7 @@ function App  () {
         </div>
         </Tab>
       </Tabs>
+      </>}
       </CarbonProvider>
     </React.Fragment>
   );

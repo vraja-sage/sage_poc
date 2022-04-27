@@ -5,6 +5,15 @@
       },
       "gridLevel": {
         "Grid Level": 12
+      },
+      "reportHeader": {
+        "Report Header": "Quarter 2"
+      },
+      "date": {
+        "Date": "26 April"
+      },
+      "reportStatus": {
+        "Report Status": "Open"
       }
     },
     "ReportcontainerOne": {
@@ -12,7 +21,16 @@
         "Display Grid Position": 2
       },
       "gridLevel": {
-        "Grid Level": 6
+        "Grid Level": 4
+      },
+      "reportTitle": {
+        "Title": "Wonderland Cake"
+      },
+      "nationalIN": {
+        "National Insurance Number": "123456ABC"
+      },
+      "extraData": {
+        "More Data": "Cash Basis"
       }
     },
     "ReportcontainerTwo": {
@@ -20,22 +38,13 @@
         "Display Grid Position": 3
       },
       "gridLevel": {
-        "Grid Level": 6
+        "Grid Level": 8
       },
-      "action": {
-        "label": "Submit update to HMRC",
-        "pre": {
-          "Pre Action": "PREAction"
-        },
-        "post": {
-          "Post Action": "PostAction"
-        },
-        "actionAPI": {
-          "Action API": "api/getData"
-        },
-        "isValidationNeed": {
-          "Is Validation Need": "NO"
-        }
+      "dueIn": {
+        "Due In": "35 days"
+      },
+      "sDeadline": {
+        "Submission deadline": "4 Aug 2022"
       }
     },
     "ReportBody": {
