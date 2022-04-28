@@ -82,11 +82,21 @@
 .submit_btn_bottom {
     position: absolute;
      right: 3%;
-     top: 110%;
+     top: 140%;
 }
 
-.bottom_button {
-    position: absolute;
-    top: 110.5%;
-    right: 18%;
+.bottom_btn {
+    /* position: absolute;
+    top: 150%;
+    right: 2.5%; */
+    float: right;
+}
+
+.wonder_text {
+    font-size: 20px;
+}
+
+
+.table_cell {
+    background-color: whitesmoke;
 }

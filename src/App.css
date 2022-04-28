@@ -116,7 +116,7 @@
 }
 
 .grid_headingone {
-  background: skyblue;
+
   height: 70px;
   border-radius: 5px;
   top: 34%;
@@ -132,13 +132,11 @@
 }
 
 .grid_left {
-  background: rgb(155, 240, 155);
   min-height: 30vh;
   text-align: center;
 }
 
 .grid_right {
-  background: rgb(155, 240, 155) ;
   justify-content: space-between;
   flex-direction: column;
   min-height: 30vh;

@@ -1,4 +1,4 @@
-import React, { useState, useEffect, Suspense } from "react";
+import React, { useState, useEffect } from "react";
 import CarbonProvider from "carbon-react/lib/components/carbon-provider";
 import { Accordion, AccordionGroup,} from "carbon-react/lib/components/accordion";
 import sageTheme from "carbon-react/lib/style/themes/sage";
@@ -10,24 +10,21 @@ import DynamicForm from "./Components/DynamicForm";
 import {FormFields} from "./Config/FormsFields";
 import { Tabs, Tab } from "carbon-react/lib/components/tabs";
 import Help from "carbon-react/lib/components/help";
-import {FlatTable,FlatTableHead,FlatTableRow,FlatTableHeader, FlatTableBody, FlatTableCell} from "carbon-react/lib/components/flat-table";
 import Content from "carbon-react/lib/components/content";
 import { saveAs } from 'file-saver';
 import { GridContainer, GridItem } from "carbon-react/lib/components/grid";
-// import Pod from "carbon-react/lib/components/pod"
-// import { APIRes } from "./Config/apiRes";
+import { APIRes } from "./Config/apiRes";
 import DisplayReport from "./Components/DisplayReport";
 import './App.css';
 
 function App  () {
   const [formData, setFormData] = useState({});
   const [layoutData, setLayoutData ] = useState("");
-  const [displayLayout, setDisplayLayout] = useState({});
-
+  const [apiResponse, setApiResponse] = useState({});
+  let pageurl = new URL(window.location.href);
+  let displayReport = pageurl.searchParams.get("report");
   let preCol = 1;
   const createLayout = async () => {
-    console.info("formData",formData);
-
     Object.entries(formData)
     const blobConfig = new Blob(
       [ JSON.stringify(formData) ], 
@@ -41,21 +38,6 @@ function App  () {
     // element.download = "userFile.json";
     // document.body.appendChild(element); 
     // element.click();
-
-    // let data = [];
-    // if (model.id) {
-    //   data = formData.data.filter(d => {
-    //     return d.id != model.id;
-    //   });
-    // } else {
-    //   model.id = +new Date();
-    //   data = formData.data.slice();
-    // }
-
-    // setFormData({
-    //   data: [model, ...data],
-    //   current: {} // todo
-    // });
   };
   const overlayOnChange = (e, rowObj ) => {
     let { rootKey, subKey, rowkey, label, subLabel } = rowObj;
@@ -76,47 +58,17 @@ function App  () {
     }
     formData[rootKey][target] = { [m.label] : e.target.value};
     setFormData(formData);
-    // console.info(e.target.value, "---",target , "====", rootKey , "++++" , m);
-    // console.log(rowField, `${key} changed ${e.target.value} type ${type}`);
-    // if (type === "single") {
-    //   setRowField({...rowField , [key]: e.target.value });
-    // } else {
-    //   // Array of values (e.g. checkbox): TODO: Optimization needed.
-    //   // let found = rowField[key]
-    //   //   ? rowField[key].find(d => d === e.target.value)
-    //   //   : false;
-
-    //   // if (found) {
-    //   //   let data = rowField[key].filter(d => {
-    //   //     return d !== found;
-    //   //   });
-    //   //   setRowField({
-    //   //     [key]: data
-    //   //   });
-    //   // } else {
-    //     console.log("found", key, rowField[key]);
-    //     // setRowField({
-    //     //   [key]: [e.target.value, ...rowField[key]]
-    //     // });
-    //     let others = rowField[key] ? [...rowField[key]] : [];
-    //     setRowField({
-    //       [key]: [e.target.value, ...others]
-    //     });
-    //   //}
-    // }
   };
   const togglePage = (e) => {
     if(e == "tab-2") {
-      loadLayout();
+      //loadLayout();
     }
   }
 
-  const loadLayout = () => {
-    let url = new URL(window.location.href);
-    let fileName = url.searchParams.get("layoutName");
-    //let iVar = "25apr"
-    import(`./${fileName}.json`).then(res => setLayoutData(res));
-  }
+  // const loadLayout = () => {
+  //   let fileName = url.searchParams.get("layoutName");
+  //   fileName && import(`./${fileName}.json`).then(res => setLayoutData(res));
+  // }
 
   const getLayoutcol = (colVal) => {
     colVal =colVal +1;
@@ -132,13 +84,13 @@ function App  () {
     preCol = 1;
     return retVal;
   }
-  let pageurl = new URL(window.location.href);
-  let displayReport = pageurl.searchParams.get("report");
+
   useEffect(() => {
     let fileName = pageurl.searchParams.get("layoutName") || "";
-    //let iVar = "25apr"
     fileName && import(`./${fileName}.json`).then(res => setLayoutData(res));
+    setApiResponse(APIRes);
   },[]);
+  
   return (
     <React.Fragment>
       <GlobalStyle />
@@ -153,13 +105,11 @@ function App  () {
       (displayReport == "display")
       ? 
       <>
-        <DisplayReport layoutData={layoutData}/>
+        <DisplayReport layoutData={layoutData} APIRes={apiResponse} getLayoutcol={getLayoutcol}/>
       </>
       :
       <>
       <h1 className="main_title">Generate Reports for SAGE BUSINESS </h1>
-
-      
       <Tabs size="large" align="left" onTabChange={togglePage} position="top" m={6} className="tabs_div">
         <Tab errorMessage="error" warningMessage="warning" infoMessage="info" tabId="tab-1" title="Layout Data" key="tab-1">
           <AccordionGroup>
@@ -191,11 +141,7 @@ function App  () {
           </AccordionGroup> 
         </Tab>
         <Tab errorMessage="error" warningMessage="warning"  align="right" infoMessage="info" tabId="tab-2" title="Layout Preview" key="tab-2" className="tab__two">
-          {/* <h3 onClick={loadLayout}>Welcome to Sage Reports</h3>
-          {Object.keys(layoutData).length > 0 && Object.keys(layoutData).map(item => <div>{item}</div>
-          )} */}
           <div className="grid_container">
-          {/* <h3 onClick={loadLayout}>Welcome to Sage Reports</h3> */}
           <GridContainer>
           {Object.keys(layoutData).length > 0 && Object.keys(layoutData).map((item) => {
             if(item == "default") {
@@ -211,48 +157,8 @@ function App  () {
                 </Content>   
                 </div>
               </GridItem> 
-            </>) 
-            
+            </>)
           })}
-            {/* <GridItem alignSelf="stretch" justifySelf="stretch" className="grid_heading">
-              <div className="grid_headingone">
-                  H1 Heading
-              </div>
-            </GridItem>
-            <GridItem alignSelf="stretch" justifySelf="stretch" className="grid_heading"  gridColumn="1 / 7" >
-              <div className="grid_left">
-                H2 Heading
-              </div>
-            </GridItem>
-            <GridItem alignSelf="stretch" justifySelf="stretch" className="grid_heading"  gridColumn="7 / 13" >
-              <div className="grid_right">
-                  H2 Heading
-                  {/* <Button buttonType="primary" noWrap className="submit_btn">
-                      Submit update to HMRC
-                    </Button> 
-              </div>
-            </GridItem>
-            <GridItem alignSelf="stretch" justifySelf="stretch" >
-              <div className="page_body">
-                Report Body
-               <FlatTable colorTheme="transparent-white" className="table_div">
-              <FlatTableHead>
-                <FlatTableRow>
-                  <FlatTableHeader>Business Expenses</FlatTableHeader>
-                  <FlatTableHeader align="right">Total Expenses</FlatTableHeader>
-                  <FlatTableHeader align="right">Total disallowable</FlatTableHeader>
-                </FlatTableRow>
-              </FlatTableHead>
-              <FlatTableBody>
-                {APIRes.map(row => <FlatTableRow>
-                    <FlatTableCell>{row.BE} </FlatTableCell>
-                    <FlatTableCell align="right">{row.TE}</FlatTableCell>
-                    <FlatTableCell align="right">{row.TD}</FlatTableCell>
-                </FlatTableRow>)}
-              </FlatTableBody>
-            </FlatTable> 
-          </div>
-          </GridItem> */}
           </GridContainer>
         </div>
         </Tab>

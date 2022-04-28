@@ -1,5 +1,5 @@
 export const APIRes = {
-  "PageTitle" : {
+  PageTitle : {
       title : "Quarter 2",
       date : "26 April",
       stats : "InProgress",
