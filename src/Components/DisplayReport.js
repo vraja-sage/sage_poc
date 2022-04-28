@@ -16,7 +16,7 @@ export default function DisplayReport ({ layoutData, APIRes, getLayoutcol }) {
     return (
         <React.Fragment>
         <GridContainer>
-        {Object.keys(layoutData).length > 0 && Object.keys(layoutData).map((item) => {
+        {/* {Object.keys(layoutData).length > 0 && Object.keys(layoutData).map((item) => {
             if(item == "default") {
               return null;
             }
@@ -31,7 +31,7 @@ export default function DisplayReport ({ layoutData, APIRes, getLayoutcol }) {
                 </div>
               </GridItem> 
             </>)
-          })}
+          })} */}
           <GridItem alignSelf="stretch" justifySelf="stretch" >
              <div className="grid_headingone">
               <div className="container_text">
