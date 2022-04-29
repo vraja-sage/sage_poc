@@ -173,41 +173,53 @@ export const FormFields = {
       ]
     },
     { key: "apiURL", label: "API URL", type: "text" },
-  ],
-  ReportSummary : [
-    {
-      key: "position",
-      label: "Display Grid Position",
-      type: "select",
-      value: "5",
-      options: [
-        { key: "1", label: "1", value: 1 },
-        { key: "2", label: "2", value: 2 },
-        { key: "3", label: "3", value: 3 },
-        { key: "4", label: "4", value: 4 },
-        { key: "5", label: "5", value: 5 },
-        { key: "6", label: "6", value: 6 },
-        { key: "7", label: "7", value: 7 },
-        { key: "8", label: "8", value: 8 },
-        { key: "9", label: "9", value: 9 },
-        { key: "10", label: "10", value: 10 },
-      ]
+    { 
+      key: "section", label: "Section One", type: "button", value : "sectionOne",  
+      props: { key : "sectionOne", values : [] }
     },
-    {
-      key: "gridLevel",
-      label: "Grid Level",
-      type: "select",
-      value: "2",
-      options: [
-        // { key: "2", label: "2", value: 2 },
-        { key: "4", label: "4", value: 4 },
-        { key: "6", label: "6", value: 6 },
-        { key: "8", label: "8", value: 8 },
-        // { key: "10", label: "10", value: 10 },
-        { key: "12", label: "12", value: 12 }
-      ]
+    { 
+      key: "section", label: "Section Two", type: "button", value : "sectionTwo",  
+      props: { key : "sectionTwo", values : [] }
+    },
+    { 
+      key: "section", label: "Section Three", type: "button", value : "sectionThree",  
+      props: { key : "sectionThree", values : [] }
     }
   ],
+  // ReportSummary : [
+  //   {
+  //     key: "position",
+  //     label: "Display Grid Position",
+  //     type: "select",
+  //     value: "5",
+  //     options: [
+  //       { key: "1", label: "1", value: 1 },
+  //       { key: "2", label: "2", value: 2 },
+  //       { key: "3", label: "3", value: 3 },
+  //       { key: "4", label: "4", value: 4 },
+  //       { key: "5", label: "5", value: 5 },
+  //       { key: "6", label: "6", value: 6 },
+  //       { key: "7", label: "7", value: 7 },
+  //       { key: "8", label: "8", value: 8 },
+  //       { key: "9", label: "9", value: 9 },
+  //       { key: "10", label: "10", value: 10 },
+  //     ]
+  //   },
+  //   {
+  //     key: "gridLevel",
+  //     label: "Grid Level",
+  //     type: "select",
+  //     value: "2",
+  //     options: [
+  //       // { key: "2", label: "2", value: 2 },
+  //       { key: "4", label: "4", value: 4 },
+  //       { key: "6", label: "6", value: 6 },
+  //       { key: "8", label: "8", value: 8 },
+  //       // { key: "10", label: "10", value: 10 },
+  //       { key: "12", label: "12", value: 12 }
+  //     ]
+  //   }
+  // ],
   ReportActions : [
     {
       key: "position",
@@ -240,40 +252,58 @@ export const FormFields = {
         // { key: "10", label: "10", value: 10 },
         { key: "12", label: "12", value: 12 }
       ]
+    },
+    { 
+      key: "action", label: "Submit update to HMRC", type: "button", value : "Open",  
+      props: {
+        pre :  { key: "preAction", label: "Pre Action", type: "text" },
+        post :  { key: "postAction", label: "Post Action", type: "text" },
+        actionAPI :  { key: "actionAPI", label: "Action API", type: "text" },
+        isValidationNeed : {
+          key: "isValidationNeed",
+          label: "Is Validation Need",
+          type: "select",
+          value: "No",
+          options: [
+            { key: "Yes", label: "Yes", value: "Yes" },
+            { key: "No", label: "No", value: "NO" },
+          ]
+        },
+      }
     }
   ],
-  PageFotter : [
-    {
-      key: "position",
-      label: "Display Grid Position",
-      type: "select",
-      value: "7",
-      options: [
-        { key: "1", label: "1", value: 1 },
-        { key: "2", label: "2", value: 2 },
-        { key: "3", label: "3", value: 3 },
-        { key: "4", label: "4", value: 4 },
-        { key: "5", label: "5", value: 5 },
-        { key: "6", label: "6", value: 6 },
-        { key: "7", label: "7", value: 7 },
-        { key: "8", label: "8", value: 8 },
-        { key: "9", label: "9", value: 9 },
-        { key: "10", label: "10", value: 10 },
-      ]
-    },
-    {
-      key: "gridLevel",
-      label: "Grid Level",
-      type: "select",
-      value: "2",
-      options: [
-        // { key: "2", label: "2", value: 2 },
-        { key: "4", label: "4", value: 4 },
-        { key: "6", label: "6", value: 6 },
-        { key: "8", label: "8", value: 8 },
-        // { key: "10", label: "10", value: 10 },
-        { key: "12", label: "12", value: 12 }
-      ]
-    }
-  ]
+  // PageFotter : [
+  //   {
+  //     key: "position",
+  //     label: "Display Grid Position",
+  //     type: "select",
+  //     value: "7",
+  //     options: [
+  //       { key: "1", label: "1", value: 1 },
+  //       { key: "2", label: "2", value: 2 },
+  //       { key: "3", label: "3", value: 3 },
+  //       { key: "4", label: "4", value: 4 },
+  //       { key: "5", label: "5", value: 5 },
+  //       { key: "6", label: "6", value: 6 },
+  //       { key: "7", label: "7", value: 7 },
+  //       { key: "8", label: "8", value: 8 },
+  //       { key: "9", label: "9", value: 9 },
+  //       { key: "10", label: "10", value: 10 },
+  //     ]
+  //   },
+  //   {
+  //     key: "gridLevel",
+  //     label: "Grid Level",
+  //     type: "select",
+  //     value: "2",
+  //     options: [
+  //       // { key: "2", label: "2", value: 2 },
+  //       { key: "4", label: "4", value: 4 },
+  //       { key: "6", label: "6", value: 6 },
+  //       { key: "8", label: "8", value: 8 },
+  //       // { key: "10", label: "10", value: 10 },
+  //       { key: "12", label: "12", value: 12 }
+  //     ]
+  //   }
+  // ]
 };

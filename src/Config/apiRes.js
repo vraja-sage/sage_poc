@@ -1,8 +1,8 @@
 export const APIRes = {
   PageTitle : {
       title : "Quarter 2",
-      date : "26 April",
-      stats : "InProgress",
+      date : "26Apr - 4 July 2022",
+      status : "InProgress",
   },
   ReportcontainerOne : {
     title : "Wonderland Cake",
@@ -16,7 +16,22 @@ export const APIRes = {
     sDeadline : "4 Aug 2022",
     sDeadlineLabeL : "Submission deadline"
   },
-  ReportBody : [
+  ReportBody : {
+    sectionOne : [
+      {
+        label : "Income - Total amount received before taking off any expenses",
+        totalAmount : "3500"
+      },
+      {
+        label : "Other business income",
+        totalAmount : "3500"
+      },
+      {
+        label : "Total buiness income",
+        totalAmount : "3500"
+      }
+    ],
+    sectionTwo : [
     {
       BE : "Costs of goods",
       TE : "3500",
@@ -56,5 +71,13 @@ export const APIRes = {
       BE : "Total expenses",
       TE : "3596",
       TD : "3596"
-    }]
+    }
+    ],
+    sectionThree : [
+      {
+        label : "Total net Profit",
+        totalAmount : "3956"
+      }
+    ]
+  }
 }

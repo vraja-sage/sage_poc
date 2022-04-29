@@ -32,6 +32,20 @@
       },
       "apiURL": {
         "API URL": "api/getReportBodyData"
+      },
+      "section": {
+        "label": "Section One",
+        "sectionOne": [
+          "Business Income"
+        ],
+        "sectionTwo": [
+          "Business Expenses",
+          "Total Expenses",
+          "Total disallowable"
+        ],
+        "sectionThree": [
+          "Net Profit or loss"
+        ]
       }
     },
     "ReportActions": {
@@ -40,6 +54,21 @@
       },
       "gridLevel": {
         "Grid Level": 12
+      },
+      "action": {
+        "label": "Submit update to HMRC",
+        "pre": {
+          "Pre Action": "PreAc"
+        },
+        "post": {
+          "Post Action": "PostAc"
+        },
+        "actionAPI": {
+          "Action API": "Action API"
+        },
+        "isValidationNeed": {
+          "Is Validation Need": "Yes"
+        }
       }
     }
   }

@@ -14,8 +14,8 @@ export default function DynamicForm (props) {
   const [isOpen , setIsOpen] = useState(false);
   const [overlayData , setOverlayData] = useState({});
 
-  const getActionData = (m, rootKey) => {
-    let propData = { m , rootKey}
+  const getActionData = (m, rootKey, type) => {
+    let propData = { m , rootKey, type };
     setOverlayData(propData)
     setIsOpen(true);
   }
@@ -127,13 +127,21 @@ export default function DynamicForm (props) {
       if(key == "action") {
         return (
           <Box m={1} p={1} >
-            <Button onClick={() => getActionData(m, rootKey)}buttonType="tertiary" ml="calc(30% - 24px)">
+            <Button onClick={() => getActionData(m, rootKey, "action")}buttonType="tertiary" ml="calc(30% - 24px)">
               {m.label} - Create Button Action
             </Button>
           </Box>
         )
       }
-
+      if(key == "section") {
+        return (
+          <Box m={1} p={1} >
+            <Button onClick={() => getActionData(m, rootKey, "section")}buttonType="tertiary" ml="calc(30% - 24px)">
+              {m.label} - Define Table Header
+            </Button>
+          </Box>
+        )
+      }
       return (
         <div key={"g" + key} className="form-group">
          <Box m={1} p={1} >

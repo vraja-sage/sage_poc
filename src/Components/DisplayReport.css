@@ -18,19 +18,11 @@
    
 }
 
-
-/* .right_text {
-    position: absolute;
-    right: 5%;
-} */
-
 .cake_text {
     position: absolute;
     left: 4%;
     top: 20%;
 }
-
-
 .insurance_text {
   position: absolute;
   left: 4%;
@@ -70,25 +62,7 @@
     background: white;
 }
 
-
-/* .grid_heading_one {
-    background: white;
-}
-
-.grid_heading_two {
-    background: white;
-} */
-
-.submit_btn_bottom {
-    position: absolute;
-     right: 3%;
-     top: 140%;
-}
-
 .bottom_btn {
-    /* position: absolute;
-    top: 150%;
-    right: 2.5%; */
     float: right;
 }
 
@@ -96,7 +70,9 @@
     font-size: 20px;
 }
 
-
 .table_cell {
     background-color: whitesmoke;
+}
+.right_align{
+    text-align:right;
 }

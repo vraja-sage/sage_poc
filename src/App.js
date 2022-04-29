@@ -40,16 +40,31 @@ function App  () {
     // element.click();
   };
   const overlayOnChange = (e, rowObj ) => {
-    let { rootKey, subKey, rowkey, label, subLabel } = rowObj;
-    if(!formData[rootKey]) {
-      formData[rootKey] = {};
+    let { rootKey, subKey, rowkey, label, subLabel, type, m } = rowObj;
+    if(type == "section") {
+      let { key, label, props, value } = m;
+      if(!formData[rootKey]) {
+        formData[rootKey] = {};
+      }
+      if(!formData[rootKey][key]) {
+        formData[rootKey][key] = { label };
+      }
+;
+      formData[rootKey][key][props.key] =  e.map(row => {  
+        return row.value; 
+      } );
+      setFormData(formData);
+    } else {
+      if(!formData[rootKey]) {
+        formData[rootKey] = {};
+      }
+      if(!formData[rootKey][subKey]) {
+        formData[rootKey][subKey] = { "label" : subLabel };
+      }
+  
+      formData[rootKey][subKey][rowkey] = { [label] : e.target.value};
+      setFormData(formData);
     }
-    if(!formData[rootKey][subKey]) {
-      formData[rootKey][subKey] = { "label" : subLabel };
-    }
- 
-    formData[rootKey][subKey][rowkey] = { [label] : e.target.value};
-    setFormData(formData);
   }
 
   const onChange = (e, target, rootKey, m) => {
