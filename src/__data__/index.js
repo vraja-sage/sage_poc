@@ -1,99 +1,39 @@
 const views = [
-    {
-        id: '1',
-        name: 'SAGE Report Default Layout',
+    // {
+    //     id: '1',
+    //     name: 'Default Layout',
+    //     componentLayout: [
+    //         {
+    //             i: 'd',
+    //             x: 5,
+    //             y: 5,
+    //             w: 5,
+    //             h: 5,
+    //             component: {
+    //                 id: 1,
+    //                 name: 'Heading'
+    //             }
+    //         }
+    //     ]
+    // },
+    {                                                                              
+        id: '2',
+        name: 'New Layout',
         componentLayout: [
-            {
-                i: 'd',
-                x: 5,
-                y: 9,
-                w: 19,
-                h: 16,
-                component: {
-                    id: 1,
-                    children: [],
-                    name: 'Card'
-                }
+            {"w":7,"h":4,"x":0,"y":0,"i":"1651742759255","moved":false,"static":false,"component":{"id":1,"name":"Heading",
+            "props":{"iValue":"Quarter 2"}
+            }
             },
-            {
-                i: 'e',
-                x: 9,
-                y: 5,
-                w: 5,
-                h: 4,
-                component: {
-                    id: 2,
-                    children: [],
-                    name: 'Button'
-                }
-            },
-            {
-                i: 'a',
-                x: 5,
-                y: 5,
-                w: 4,
-                h: 4,
-                component: {
-                    id: 2,
-                    children: [],
-                    name: 'Button'
-                }
-            },
-            {
-                i: 'b',
-                x: 19,
-                y: 5,
-                w: 5,
-                h: 4,
-                component: {
-                    id: 2,
-                    children: [],
-                    name: 'Button'
-                }
-            },
-            {
-                w: 5,
-                h: 4,
-                x: 14,
-                y: 5,
-                i: '1623972148155',
-                component: {
-                    id: 2,
-                    name: 'Button'
-                }
-            },
-            {
-                w: 24,
-                h: 5,
-                x: 0,
-                y: 25,
-                i: '1623972149715',
-                component: {
-                    id: 4,
-                    name: 'Footer'
-                }
-            },
-            {
-                w: 24,
-                h: 5,
-                x: 0,
-                y: 0,
-                i: '1623972168867',
-                component: {
-                    id: 3,
-                    name: 'Header'
-                }
-            },
-            {
-                w: 5,
-                h: 20,
-                x: 0,
-                y: 5,
-                i: '1623972213747',
-                component: {
-                    id: 4,
-                    name: 'SideBar'
-                }
+            
+            {"w":9,"h":5,"x":0,"y":4,"i":"1651742779407","moved":false,"static":false,"component":{"id":2,"name":"HeadingWithPill","props":{"iValue":"26 April - 4 July 2022 | In Progress"}}},
+            
+            {"w":12,"h":14,"x":0,"y":9,"i":"1651742843664","moved":false,"static":false,"component":{"id":4,"name":"Card","props":{
+                "iValue":"WonderLand Cakes | National Insurance Number: ${NINO} | Cash basic | Sole trader",
+                "style" : "primary|secondary|",
+
+            }}},
+            
+            {"w":12,"h":14,"x":12,"y":9,"i":"1651742973491","moved":false,"static":false,"component":{"id":4,"name":"Card","props":{"iValue":"Due in ${days} days ${totalAmount} | Submission deadline 4 August 2022"}}
             }
         ]
     }
@@ -102,27 +42,35 @@ const views = [
 const components = [
     {
         id: 1,
-        name: 'Card'
+        name: 'Heading'
     },
     {
         id: 2,
-        name: 'Button'
+        name: 'HeadingWithPill'
     },
     {
         id: 3,
-        name: 'Header'
+        name: 'SubHeading'
     },
     {
         id: 4,
-        name: 'Footer'
+        name: 'Card'
     },
     {
         id: 5,
-        name: 'SideBar'
+        name: 'Table'
     },
     {
         id: 6,
-        name: 'Nav'
+        name: 'Button'
+    },
+    {
+        id: 7,
+        name : 'Link'
+    },
+    {
+        id: 8,
+        name : "Typography"
     }
 ];
 

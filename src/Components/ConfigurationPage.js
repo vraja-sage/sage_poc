@@ -1,11 +1,18 @@
 import { find as _find } from "lodash";
 import React, { useCallback, useState } from "react";
 import { Layout, Responsive, WidthProvider } from "react-grid-layout";
+import Dialog from "carbon-react/lib/components/dialog";
+import Typography from "carbon-react/lib/components/typography";
+import Form from "carbon-react/lib/components/form";
+import Button from "carbon-react/lib/components/button";
+import Textbox from "carbon-react/lib/components/textbox";
+import { FilterableSelect, Option } from "carbon-react/lib/components/select";
+import Heading from "carbon-react/lib/components/heading";
 import { Redirect, useHistory, useParams } from "react-router-dom";
 import { useAppDispatch, useAppSelector } from "../app/hooks";
 import { selectors, setLayoutView } from "../app/reducer";
 import DraggableComponent from "./DraggableComponent";
-import LayoutItem from "./LayoutItem";
+import LayoutItemConfig from "./LayoutItemConfig";
 
 const ResponsiveReactGridLayout = WidthProvider(Responsive);
 
@@ -27,6 +34,11 @@ const ConfigurationPage = () => {
     view ? view.componentLayout : []
   );
   const [component, setComponent] = useState();
+  const [isCompoOpen, setIsCompoOpen] = useState(false);
+  const [preInput, setPreInput] = useState({});
+  const [fields, setFields] = useState([{ value: null }]);
+  const [tableHeader, setTableHeader] = useState("");
+  let cName = (component && component.name) || "";
 
   const mapLayout = useCallback(
     (currentLayout , newLayout ) => {
@@ -42,8 +54,35 @@ const ConfigurationPage = () => {
     setComponent(dragComponent);
   }, []);
 
-  const onDrop = useCallback(
-    (layouts, item, e) => {
+  const updateInputValue = (e) => {
+    let comp = component;
+    if(component.props && Object.keys(component.props).length > 0 ) {
+      comp.props[e.target.name] = e.target.value;
+    } else{
+      comp = { ...component, props : { [e.target.name] : e.target.value }};
+    }
+    setComponent(comp);
+  }
+  const onDropEle = (layouts, item, e, compAdd) => {
+    setIsCompoOpen(true);
+    setPreInput({ layouts, item, e, compAdd })
+  }
+
+  const onSaveInput = () => {
+    const {  layouts, item, e, compAdd } = preInput;
+    if(cName === "Table") {
+      console.info(tableHeader,"fields------",fields);
+      let comp = { ...component, props : { "tableHeader" : tableHeader, "tableContent" : fields }};
+      setlayout((prev) =>
+      mapLayout(prev, layouts).concat({
+        ...item,
+        i: new Date().getTime().toString(),
+        component: comp,
+        isDraggable: undefined
+      })
+    );
+      setIsCompoOpen(false);
+    } else {
       setlayout((prev) =>
         mapLayout(prev, layouts).concat({
           ...item,
@@ -52,6 +91,13 @@ const ConfigurationPage = () => {
           isDraggable: undefined
         })
       );
+      setIsCompoOpen(false);
+    }
+  }
+
+  const onDrop = useCallback(
+    (layouts, item, e) => {
+      onDropEle(layouts, item, e, component);      
     },
     [component, mapLayout]
   );
@@ -77,6 +123,33 @@ const ConfigurationPage = () => {
   if (!view) {
     return <Redirect push to="/" />;
   }
+
+  function handleChange(i, event) {
+    if(i == "TH") {
+      setTableHeader(event.target.value);
+    } else {
+      const values = [...fields];
+      values[i].value = event.target.value;
+      setFields(values);
+    }
+  }
+
+  function handleAdd() {
+    const values = [...fields];
+    values.push({ value: null });
+    setFields(values);
+  }
+
+  function handleRemove(i) {
+    const values = [...fields];
+    values.splice(i , 1);
+    setFields(values);
+  }
+
+  const saveData = () => {
+    // type === "section" && onChange(fields, overlayData );
+    // setIsOpen(false);
+  } 
 
   return (
     <div className="row justify-content-between">
@@ -126,12 +199,55 @@ const ConfigurationPage = () => {
                 >
                   x
                 </span>
-                <LayoutItem componentLayout={componentLayout} />
+                <LayoutItemConfig componentLayout={componentLayout} />
               </div>
             ))}
           </ResponsiveReactGridLayout>
         </div>
       </div>
+      {isCompoOpen && <>
+        <Dialog open={true} >
+            <Form stickyFooter={true}  leftSideButtons={<Button onClick={() => setIsCompoOpen(false)}>Cancel</Button>} saveButton={<Button buttonType="primary" onClick={() => onSaveInput()} type="submit">
+                  Save
+                </Button>}>
+              {cName != "Table" && <Textbox label="Placeholder Value" name="iValue" onChange={(e) => updateInputValue(e)} />}
+              {cName == "Button" && <> 
+              <FilterableSelect id="controlled" name="iButtonType" label="Button Type" onChange={updateInputValue}>
+                <Option text="primary" value="primary" />
+                <Option text="secondary" value="secondary" />
+                <Option text="dashed" value="dashed" />
+                <Option text="tertiary" value="tertiary" />
+              </FilterableSelect>
+              </>}
+              {cName == "Table" && <>
+                <>
+                <Heading title="Table Header" divider={false} />
+                <Textbox name="iValue" onChange={(e) => handleChange("TH" , e)} />
+                </>
+                <>
+                <Heading title="Table Content" divider={false} />
+                {fields.map((field, idx) => {
+                  return (
+                      <div key={`${field}-${idx}`}>
+                      <Textbox
+                        type="text"
+                        onChange={e => handleChange(idx, e)}
+                        inputIcon ="delete"
+                        value={field.value}
+                        iconOnClick = {() => handleRemove(idx)}
+                      />
+                      </div>
+                  );
+                })}
+                <Button buttonType="primary" onClick={() => handleAdd()} iconType="add" size="small" ml={2}>
+                    Add 
+                </Button>
+                </>
+              </>}
+            </Form>
+          </Dialog>
+      </>}
+      <div style={{ height : "100px"}}></div>
     </div>
   );
 };

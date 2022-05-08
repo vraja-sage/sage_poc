@@ -14,7 +14,7 @@ import GlobalStyle from "carbon-react/lib/style/global-style";
 import "carbon-react/lib/style/fonts.css";
 
 const LayoutsPage = () => {
-  // const dispatch = useAppDispatch();
+  const dispatch = useAppDispatch();
   const APIRes = {
     PageTitle : {
         title : "Quarter 2",
@@ -103,14 +103,14 @@ const LayoutsPage = () => {
   const views = useAppSelector(selectors.getViews);
   let pageurl = new URL(window.location.href);
   let displayReport = pageurl.searchParams.get("report");
-  // const fetch = useCallback(() => dispatch(fetchData()), [dispatch]);
+  const fetch = useCallback(() => dispatch(fetchData()), [dispatch]);
 
-  // useEffect(() => {
-  //   /* TODO: remove condition when we will save the data on server */
-  //   if (!views.length) {
-  //     fetch();
-  //   }
-  // }, [fetch, views.length]);
+  useEffect(() => {
+    /* TODO: remove condition when we will save the data on server */
+    if (!views.length) {
+      fetch();
+    }
+  }, [fetch, views.length]);
 
   // useEffect(() => {
   //   // import("./../Config/apiRes").then(res => { console.info("res-----",res); setApiResponse(res) });
