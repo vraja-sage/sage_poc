@@ -49,10 +49,10 @@ const LayoutItemData = ({ componentLayout, apiResponse }) => {
     } else {
       argOne = rowValues[0];
     }
-    // console.info("componentData",componentData);
+     console.info(props,"componentData",componentData);
     switch (name) {
       case "Heading" : return (
-          < >
+          <>
             <Heading title={argOne} divider={false} ml="8px"/>
           </>);
           break;
@@ -78,7 +78,7 @@ const LayoutItemData = ({ componentLayout, apiResponse }) => {
           break;
       case "Button" : return (
         <>
-          <Button {...props} buttonType={ iButtonType ? iButtonType: "primary"} onClick={() => doBtnAction(argTwo)} className="bottom_btn">
+          <Button {...props} buttonType="primary" onClick={() => doBtnAction(argTwo)} className="bottom_btn">
               {argOne}
           </Button>
         </>
@@ -199,7 +199,7 @@ const LayoutItemData = ({ componentLayout, apiResponse }) => {
   //  console.info("componentLayout",componentLayout);
   return (
     <>
-      {componentLayout.component ? <> {renderRowReport(componentLayout.component)}</> : "NO Value given"}
+      {componentLayout.component ? <GridItem alignSelf="stretch" justifySelf="stretch"> {renderRowReport(componentLayout.component)}</GridItem> : "NO Value given"}
     </>
   )
 };

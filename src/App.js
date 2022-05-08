@@ -7,6 +7,7 @@ import {
 } from "react-router-dom";
 import ConfigurationPage from './Components/ConfigurationPage';
 import LayoutsPage from './Components/LayoutsPage';
+import DisplayReport from './Components/DisplayReport';
 
 function App() {
   return (
@@ -23,6 +24,7 @@ function App() {
         <div className="mt-5 pt-5 container">
           <Switch>
             <Route path="/configuration/:id" component={ConfigurationPage} />
+            <Route path="/reportDisplay" component={DisplayReport} />
             <Route path="/" component={LayoutsPage} />
           </Switch>
         </div>

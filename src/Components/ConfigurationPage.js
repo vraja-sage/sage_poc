@@ -3,12 +3,14 @@ import React, { useCallback, useState } from "react";
 import { Layout, Responsive, WidthProvider } from "react-grid-layout";
 import Dialog from "carbon-react/lib/components/dialog";
 import Typography from "carbon-react/lib/components/typography";
+import JSONFormatter from 'json-formatter-js'
 import Form from "carbon-react/lib/components/form";
 import Button from "carbon-react/lib/components/button";
 import Textbox from "carbon-react/lib/components/textbox";
 import { FilterableSelect, Option } from "carbon-react/lib/components/select";
 import Heading from "carbon-react/lib/components/heading";
 import { Redirect, useHistory, useParams } from "react-router-dom";
+import { saveAs } from 'file-saver';
 import { useAppDispatch, useAppSelector } from "../app/hooks";
 import { selectors, setLayoutView } from "../app/reducer";
 import DraggableComponent from "./DraggableComponent";
@@ -146,9 +148,20 @@ const ConfigurationPage = () => {
     setFields(values);
   }
 
-  const saveData = () => {
-    // type === "section" && onChange(fields, overlayData );
-    // setIsOpen(false);
+  const handleDownload = () => {
+    let data = localStorage.getItem('persist:views'); 
+    if(data !== undefined) { 
+      let jsonFile = JSON.parse(data); 
+      if(jsonFile.views) {
+        let jData = JSON.parse(jsonFile.views);
+      var blobConfig = new Blob([JSON.stringify(jData, null, 4)], {
+        type: 'application/json;charset=utf-8'
+      });
+    
+      saveAs(blobConfig, "newLayout.json");
+      }
+    } 
+   
   } 
 
   return (
@@ -171,6 +184,11 @@ const ConfigurationPage = () => {
           <div className="col-2 text-end p-0">
             <button className="btn" onClick={handleSave}>
               Save
+            </button>
+          </div>
+          <div className="col-2 text-end p-0">
+            <button className="btn" onClick={handleDownload}>
+              Download DSL
             </button>
           </div>
         </div>
