@@ -21,7 +21,7 @@ const Layout = ({ view, apiResponse }) => {
   }, [setHeight]);
 
 
-  console.info("staticView",staticView);
+
   return (
     <div className="col-sm-6 col-lg-4 pb-5">
       <div className="card h-100">

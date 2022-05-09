@@ -117,7 +117,7 @@ const LayoutsPage = () => {
   //   console.info("APIRes=========",APIRes)
   // });
 
-  console.info("views",views);
+  //console.info("views",views);
   return (
     <React.Fragment>
       <GlobalStyle />

@@ -1,5 +1,6 @@
 import React, { useCallback, useMemo, useState, useEffect } from 'react';
 import { Pencil } from 'react-bootstrap-icons';
+import CarbonProvider from "carbon-react/lib/components/carbon-provider";
 import { Responsive, WidthProvider } from "react-grid-layout";
 import { GridContainer, GridItem } from "carbon-react/lib/components/grid";
 import { Link } from 'react-router-dom';
@@ -50,19 +51,36 @@ const DisplayReport = () => {
   },[]);
   console.info(layoutData[0]);
   let { name , componentLayout} = layoutData && layoutData[0];
+  let preCol = 1;
+  const getLayoutcol = (colVal = 13) => {
+    colVal =colVal +1;
+    let retVal = `1 / ${colVal}`;
+    console.info(colVal,"preCol",preCol)
+    if(colVal < 13) {
+      if(preCol != 1) {
+        colVal  = 13;
+      }
+     
+      retVal = `${preCol} / ${colVal}`;
+      preCol = colVal;
+      return retVal;
+    }
+    preCol = 1;
+    return retVal;
+  }
   return (
-    <>
+    <CarbonProvider>
         <Heading title={name} divider={false} ml="8px"/>
         <GridContainer>
             {
               componentLayout && componentLayout.map(componentLayoutData => (
                 <>
-                  <LayoutItemData componentLayout={componentLayoutData} apiResponse={apiResponse} />
+                  <LayoutItemData getLayoutcol={getLayoutcol} componentLayout={componentLayoutData} apiResponse={apiResponse} />
                 </>
               ))
             }
           </GridContainer>
-    </>
+    </CarbonProvider>
   )
 };
 

@@ -15,6 +15,7 @@
                     "id": 1,
                     "name": "Heading",
                     "props": {
+                        "colValue": "12",
                         "iValue": "Quarter 2"
                     }
                 }
@@ -31,6 +32,7 @@
                     "id": 2,
                     "name": "HeadingWithPill",
                     "props": {
+                        "colValue": "12",
                         "iValue": "26 April - 4 July 2022 | In Progress"
                     }
                 }
@@ -47,7 +49,8 @@
                     "id": 4,
                     "name": "Card",
                     "props": {
-                        "iValue": "WonderLand Cakes | National Insurance Number: ${NINO} | Cash basic | Sole trader",
+                        "colValue": "6",
+                        "iValue": "WonderLand Cakes | National Insurance Number: #NINO | Cash basic | Sole trader",
                         "style": "primary|secondary|"
                     }
                 }
@@ -64,7 +67,8 @@
                     "id": 4,
                     "name": "Card",
                     "props": {
-                        "iValue": "Due in ${days} days ${totalAmount} | Submission deadline 4 August 2022"
+                        "colValue": "6",
+                        "iValue": "Due in #days days #totalAmount | Submission deadline 4 August 2022"
                     }
                 }
             },
@@ -80,8 +84,31 @@
                     "id": 6,
                     "name": "Button",
                     "props": {
+                        "colValue": "12",
                         "iValue": "Save",
-                        "buttonType": "darkBackground"
+                        "buttonType": "primary"
+                    }
+                }
+            },
+            {
+                "w": 5,
+                "h": 6,
+                "x": 10,
+                "y": 23,
+                "i": "1652105546502",
+                "moved": false,
+                "static": false,
+                "component": {
+                    "id": 5,
+                    "name": "Table",
+                    "props": {
+                        "colValue": "12",
+                        "tableHeader": "Net Profit or los",
+                        "tableContent": [
+                            {
+                                "value": "Net Profit or los #totalAmountA"
+                            }
+                        ]
                     }
                 }
             }

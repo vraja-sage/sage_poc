@@ -40,6 +40,7 @@ const ConfigurationPage = () => {
   const [preInput, setPreInput] = useState({});
   const [fields, setFields] = useState([{ value: null }]);
   const [tableHeader, setTableHeader] = useState("");
+  const [tableColValue, setTableColValue] = useState("");
   let cName = (component && component.name) || "";
 
   const mapLayout = useCallback(
@@ -73,8 +74,7 @@ const ConfigurationPage = () => {
   const onSaveInput = () => {
     const {  layouts, item, e, compAdd } = preInput;
     if(cName === "Table") {
-      console.info(tableHeader,"fields------",fields);
-      let comp = { ...component, props : { "tableHeader" : tableHeader, "tableContent" : fields }};
+      let comp = { ...component, props : { "colValue" : tableColValue, "tableHeader" : tableHeader, "tableContent" : fields }};
       setlayout((prev) =>
       mapLayout(prev, layouts).concat({
         ...item,
@@ -127,7 +127,9 @@ const ConfigurationPage = () => {
   }
 
   function handleChange(i, event) {
-    if(i == "TH") {
+    if(i == "colValue") {
+      setTableColValue(event.target.value);
+    }else if(i == "TH") {
       setTableHeader(event.target.value);
     } else {
       const values = [...fields];
@@ -228,9 +230,18 @@ const ConfigurationPage = () => {
             <Form stickyFooter={true}  leftSideButtons={<Button onClick={() => setIsCompoOpen(false)}>Cancel</Button>} saveButton={<Button buttonType="primary" onClick={() => onSaveInput()} type="submit">
                   Save
                 </Button>}>
-              {cName != "Table" && <Textbox label="Placeholder Value" name="iValue" onChange={(e) => updateInputValue(e)} />}
+              {cName != "Table" && <>
+              <Textbox label="Placeholder Value" name="iValue" onChange={(e) => updateInputValue(e)} />
+              <FilterableSelect name="colValue" label="Column Display" onChange={updateInputValue}>
+                <Option text="4" value="4" />
+                <Option text="6" value="6" />
+                <Option text="8" value="8" />
+                <Option text="12" value="12" />
+              </FilterableSelect>
+              </>
+              }
               {cName == "Button" && <> 
-              <FilterableSelect id="controlled" name="iButtonType" label="Button Type" onChange={updateInputValue}>
+              <FilterableSelect id="controlled" name="buttonType" label="Button Type" onChange={updateInputValue}>
                 <Option text="primary" value="primary" />
                 <Option text="secondary" value="secondary" />
                 <Option text="dashed" value="dashed" />
@@ -241,6 +252,12 @@ const ConfigurationPage = () => {
                 <>
                 <Heading title="Table Header" divider={false} />
                 <Textbox name="iValue" onChange={(e) => handleChange("TH" , e)} />
+                <FilterableSelect name="colValue" label="Column Display" onChange={(e) => handleChange("colValue" , e)}>
+                  <Option text="4" value="4" />
+                  <Option text="6" value="6" />
+                  <Option text="8" value="8" />
+                  <Option text="12" value="12" />
+                </FilterableSelect>
                 </>
                 <>
                 <Heading title="Table Content" divider={false} />

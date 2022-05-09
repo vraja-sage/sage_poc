@@ -11,12 +11,13 @@ import Typography, {
   ListItem,
 } from "carbon-react/lib/components/typography";
 
-const LayoutItemData = ({ componentLayout, apiResponse }) => {
+const LayoutItemData = ({ getLayoutcol, componentLayout, apiResponse }) => {
   const doBtnAction = (hrefLink) => {
     window.open(hrefLink , "_blank");
   }
   const constructTableData = (rowData) => {
-    let rowDataVal = rowData && rowData.value.split("|");
+    let rowDataVal = rowData && replaceWithAPIRes(rowData.value);
+    rowDataVal = rowDataVal.split("|");
     let arrData = rowDataVal && rowDataVal.map(rowContent => (<> 
         
           <FlatTableCell>{rowContent} </FlatTableCell>
@@ -24,11 +25,24 @@ const LayoutItemData = ({ componentLayout, apiResponse }) => {
     </> ));
     return (<FlatTableRow>{arrData}</FlatTableRow>);
   }
+
+  const replaceWithAPIRes = (iValue) => {
+    if(iValue) {
+      for (let x of Object.entries(apiResponse)) {
+        iValue = iValue.replace( `#${x[0]}` , x[1] );
+      }
+    }
+    return iValue;
+  }
+  
   const renderRowReport = (componentData) => {
-    console.info("apiResponse",apiResponse);
+
     const {name, props } = componentData;
-    const { iValue, iButtonType, tableHeader, tableContent } = props;
+    let { iValue, tableHeader, tableContent, colValue } = props;
+    let colRowVal = getLayoutcol(parseInt(colValue))
+    //console.info(colValue,"colRowVal",colRowVal)
     let argOne = "", argTwo = "", argThree ="", argFour="", tableHeaderVal = [], rowValues=[] ;
+    iValue = replaceWithAPIRes(iValue);
     if(name == "Table") {
       tableHeaderVal = tableHeader && tableHeader.split("|");
     } else {
@@ -49,43 +63,43 @@ const LayoutItemData = ({ componentLayout, apiResponse }) => {
     } else {
       argOne = rowValues[0];
     }
-     console.info(props,"componentData",componentData);
+    // console.info(props,"componentData",componentData);
     switch (name) {
       case "Heading" : return (
-          <>
+          <GridItem alignSelf="stretch" justifySelf="stretch" gridColumn={colRowVal}>
             <Heading title={argOne} divider={false} ml="8px"/>
-          </>);
+          </GridItem>);
           break;
       case "HeadingWithPill" : return (
-            < >
+            <GridItem alignSelf="stretch" justifySelf="stretch" gridColumn={colRowVal}>
               <Heading title={argOne} divider={false} ml="8px" pills={<Pill>{argTwo}</Pill>}/>
-            </>);
+            </GridItem>);
             break;
       case "Typography" : return (
-              <> 
+              <GridItem alignSelf="stretch" justifySelf="stretch" gridColumn={colRowVal}> 
                   <Typography variant="h2">{argOne}</Typography>
-              </>);
+              </GridItem>);
               break;          
       case "Card" : return (
-        <> 
+        <GridItem alignSelf="stretch" justifySelf="stretch" gridColumn={colRowVal}> 
           <Dl ml="10px" dtTextAlign="left">
               <Dt className="wonder_text">{argOne}</Dt>
               <Dt>{argTwo} </Dt>
               <Dt>{argThree}</Dt>
               <Dt>{argFour}</Dt>
           </Dl>
-        </>);
+        </GridItem>);
           break;
       case "Button" : return (
-        <>
-          <Button {...props} buttonType="primary" onClick={() => doBtnAction(argTwo)} className="bottom_btn">
+        <GridItem alignSelf="stretch" justifySelf="stretch" gridColumn={colRowVal}>
+          <Button {...props} onClick={() => doBtnAction(argTwo)} className="bottom_btn">
               {argOne}
           </Button>
-        </>
+        </GridItem>
       );
       break;
       case "Table" : return (
-        <>
+        <GridItem alignSelf="stretch" justifySelf="stretch" gridColumn={colRowVal}>
             <FlatTable colorTheme="transparent-white">
               <FlatTableHead>
                 <FlatTableRow>
@@ -103,7 +117,7 @@ const LayoutItemData = ({ componentLayout, apiResponse }) => {
                   )}
               </FlatTableBody>
             </FlatTable>
-        </>
+        </GridItem>
       );
       // case "Footer" : return ( 
       //   <>
@@ -197,9 +211,10 @@ const LayoutItemData = ({ componentLayout, apiResponse }) => {
     }
   }
   //  console.info("componentLayout",componentLayout);
+  
   return (
     <>
-      {componentLayout.component ? <GridItem alignSelf="stretch" justifySelf="stretch"> {renderRowReport(componentLayout.component)}</GridItem> : "NO Value given"}
+      {componentLayout.component ? <> {renderRowReport(componentLayout.component)}</> : "NO Value given"}
     </>
   )
 };

@@ -28,7 +28,7 @@ const LayoutItemConfig = ({ componentLayout }) => {
               <Heading title={componentLayout.component.name} divider={false} />
               <Typography fontSize="16px" m={0}>
                 {componentLayout.component.props ? componentLayout.component.props.iValue : "No Place Holder"}
-                {componentLayout.component.props && componentLayout.component.props.iButtonType ? " | "+componentLayout.component.props.iButtonType: null}
+                {componentLayout.component.props && componentLayout.component.props.buttonType ? " | "+componentLayout.component.props.buttonType: null}
               </Typography>
             </CardColumn>
           </CardRow>
