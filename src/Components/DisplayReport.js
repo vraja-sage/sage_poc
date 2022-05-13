@@ -1,16 +1,19 @@
 import React, { useCallback, useMemo, useState, useEffect } from 'react';
-import { Pencil } from 'react-bootstrap-icons';
+// import { Pencil } from 'react-bootstrap-icons';
+import Button from "carbon-react/lib/components/button";
 import CarbonProvider from "carbon-react/lib/components/carbon-provider";
-import { Responsive, WidthProvider } from "react-grid-layout";
+// import { Responsive, WidthProvider } from "react-grid-layout";
 import { GridContainer, GridItem } from "carbon-react/lib/components/grid";
 import { Link } from 'react-router-dom';
 import LayoutItemData from './LayoutItemData';
-import { useAppDispatch, useAppSelector } from "../app/hooks";
-import { fetchData, selectors } from '../app/reducer';
-import { APIRes } from "../Config/apiRes";
+// import { useAppDispatch, useAppSelector } from "../app/hooks";
+// import { fetchData, selectors } from '../app/reducer';
+// import { APIRes } from "../Config/apiRes";
+import axios from 'axios';
 import Heading from "carbon-react/lib/components/heading";
-
-const ResponsiveReactGridLayout = WidthProvider(Responsive);
+import DefaultPages, { Page  } from "carbon-react/lib/components/pages";
+import DialogFullScreen from "carbon-react/lib/components/dialog-full-screen";
+// const ResponsiveReactGridLayout = WidthProvider(Responsive);
 
 const rowHeights = { lg: 5, md: 3, sm: 2, xs: 1 };
 const cols = { lg: 24, md: 24, sm: 24, xs: 24 };
@@ -18,21 +21,19 @@ const breakpoints = { lg: 1200, md: 996, sm: 768, xs: 480 };
 
 const DisplayReport = () => {
   const [layoutData, setLayoutData ] = useState("");
-  const [apiResponse, setApiResponse] = useState({});
+  const [apiResponse, setApiResponse] = useState([]);
+  const [subLayoutData, setSubLayoutData ] = useState("");
+  const [subApiResponse, setSubApiResponse] = useState([]);
+  const [isOpen, setIsOpen] = useState(false);
+  const [pageIndex, setPageIndex] = useState("");
+  const [isDisabled, setIsDisabled] = useState(false);
+  let componentLayout = [];
   // const dispatch = useAppDispatch();
 
   // const views = useAppSelector(selectors.getViews);
   // let pageurl = new URL(window.location.href);
   // let displayReport = pageurl.searchParams.get("report");
   // const fetch = useCallback(() => dispatch(fetchData()), [dispatch]);
-
-  // useEffect(() => {
-  //   /* TODO: remove condition when we will save the data on server */
-  //   if (!views.length) {
-  //     fetch();
-  //   }
-  // }, [fetch, views.length]);
-
 
   // const staticView = useMemo(() => view.componentLayout.map(layout => ({ ...layout, static: true })), [view.componentLayout]);
 
@@ -41,44 +42,116 @@ const DisplayReport = () => {
   // const onBreakpointChange = useCallback((newBreakpoint) => {
   //   setHeight(rowHeights[newBreakpoint])
   // }, [setHeight]);
-  let pageurl = new URL(window.location.href);
-  let displayReport = pageurl.searchParams.get("report");
+
+  const getApiData = () => {
+    axios.get(`https://627a2ffe73bad506858431bb.mockapi.io/api/v1/getResponse`)
+    .then(res => {
+      setApiResponse(res.data);
+    })
+  }
+  const getLayoutData = () => {
+    axios.get(`https://627a2ffe73bad506858431bb.mockapi.io/api/v1/getLayout`)
+    .then(res => {
+      setLayoutData(res.data)
+    })
+  }
   useEffect(() => {
-    let fileName = pageurl.searchParams.get("layoutName") || "defaultView";
-    fileName && import(`../${fileName}.json`).then(res => setLayoutData(res));
-    setApiResponse(APIRes);
+    if(apiResponse.length > 0){
+      getLayoutData();
+    } else {
+      getApiData();
+    }
+
+  },[apiResponse.length]);
   
-  },[]);
-  console.info(layoutData[0]);
-  let { name , componentLayout} = layoutData && layoutData[0];
   let preCol = 1;
   const getLayoutcol = (colVal = 13) => {
     colVal =colVal +1;
     let retVal = `1 / ${colVal}`;
-    console.info(colVal,"preCol",preCol)
+
+   
     if(colVal < 13) {
       if(preCol != 1) {
         colVal  = 13;
       }
      
       retVal = `${preCol} / ${colVal}`;
-      preCol = colVal;
+      preCol = colVal == 13 ? 1 : colVal;
+      console.info(preCol,"preCol",colVal,"colVal",retVal)
       return retVal;
     }
     preCol = 1;
+    console.info(preCol,"preCol111111",colVal,"colVal",retVal)
     return retVal;
   }
+
+  const handleCancel = () => {
+    setIsOpen(false);
+    setPageIndex(0);
+  };
+
+  const handleOpen = async (propsData) => {
+    console.info("propsData",propsData)
+    setIsOpen(true);
+    setPageIndex(0);
+    await axios.get(`https://627a2ffe73bad506858431bb.mockapi.io/api/v1/newLayout`)
+    .then(res => {
+      setSubLayoutData(res.data)
+    });
+    await axios.get(`https://627a2ffe73bad506858431bb.mockapi.io/api/v1/getInvoiceData`)
+    .then(res => {
+      setSubApiResponse(res.data);
+    });
+
+  };
+
+  const handleOnClick = () => {
+    setIsDisabled(true);
+    setPageIndex(pageIndex + 1);
+    setTimeout(() => {
+      setIsDisabled(false);
+    }, 50);
+  };
+
+  const handleBackClick = ev => {
+    setIsDisabled(true);
+    setTimeout(() => {
+      setIsDisabled(false);
+    }, 50);
+
+    if (!isDisabled) {
+      ev.preventDefault();
+      setPageIndex(pageIndex - 1);
+    }
+  };
+  if(isOpen) {
+    componentLayout = subLayoutData && subLayoutData[0].componentLayout;
+  } else {
+    componentLayout = layoutData && layoutData[0].componentLayout;
+  }
+
   return (
     <CarbonProvider>
-        <Heading title={name} divider={false} ml="8px"/>
+        {/* <Heading title={name} divider={false} ml="8px"/> */}
         <GridContainer>
-            {
-              componentLayout && componentLayout.map(componentLayoutData => (
+            {isOpen === false &&
+              componentLayout && componentLayout.map((componentLayoutData, key) => (
                 <>
-                  <LayoutItemData getLayoutcol={getLayoutcol} componentLayout={componentLayoutData} apiResponse={apiResponse} />
+                  <LayoutItemData handleOpen={handleOpen} key={key} getLayoutcol={getLayoutcol} componentLayout={componentLayoutData} apiResponse={apiResponse} />
                 </>
               ))
             }
+            {subApiResponse.length > 0 && <>
+            {/* <DefaultPages pageIndex={pageIndex}>
+              <Page title="Sage Report"> */}
+                {componentLayout && componentLayout.map((componentLayoutData, key) => (
+                <>
+                  <LayoutItemData handleOpen={handleOpen} key={key} getLayoutcol={getLayoutcol} componentLayout={componentLayoutData} apiResponse={subApiResponse} />
+                </>
+              ))}
+              {/* </Page>
+            </DefaultPages> */}
+          </>}
           </GridContainer>
     </CarbonProvider>
   )

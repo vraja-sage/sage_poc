@@ -15,7 +15,6 @@
                     "id": 1,
                     "name": "Heading",
                     "props": {
-                        "colValue": "12",
                         "iValue": "Quarter 2"
                     }
                 }
@@ -32,7 +31,6 @@
                     "id": 2,
                     "name": "HeadingWithPill",
                     "props": {
-                        "colValue": "12",
                         "iValue": "26 April - 4 July 2022 | In Progress"
                     }
                 }
@@ -41,7 +39,7 @@
                 "w": 12,
                 "h": 14,
                 "x": 0,
-                "y": 9,
+                "y": 10,
                 "i": "1651742843664",
                 "moved": false,
                 "static": false,
@@ -59,7 +57,7 @@
                 "w": 12,
                 "h": 14,
                 "x": 12,
-                "y": 9,
+                "y": 10,
                 "i": "1651742973491",
                 "moved": false,
                 "static": false,
@@ -68,34 +66,16 @@
                     "name": "Card",
                     "props": {
                         "colValue": "6",
-                        "iValue": "Due in #days days #totalAmount | Submission deadline 4 August 2022"
+                        "iValue": "Due in #days days | Submission deadline 4 August 2022"
                     }
                 }
             },
             {
-                "w": 5,
-                "h": 6,
-                "x": 12,
-                "y": 25,
-                "i": "1652020184511",
-                "moved": false,
-                "static": false,
-                "component": {
-                    "id": 6,
-                    "name": "Button",
-                    "props": {
-                        "colValue": "12",
-                        "iValue": "Save",
-                        "buttonType": "primary"
-                    }
-                }
-            },
-            {
-                "w": 5,
-                "h": 6,
-                "x": 10,
-                "y": 23,
-                "i": "1652105546502",
+                "w": 24,
+                "h": 11,
+                "x": 0,
+                "y": 26,
+                "i": "1652184620346",
                 "moved": false,
                 "static": false,
                 "component": {
@@ -103,12 +83,99 @@
                     "name": "Table",
                     "props": {
                         "colValue": "12",
-                        "tableHeader": "Net Profit or los",
+                        "tableHeader": "Business Income | ",
                         "tableContent": [
                             {
-                                "value": "Net Profit or los #totalAmountA"
+                                "value": "Construction Industry | #TBI1",
+                                "props"  : {
+                                    "onClick" : "displayDetails"
+                                }
+                            },
+                            {
+                                "value": "Wages, Salaries | #TBI2"
+                            },
+                            {
+                                "value": "Total net Profit  | #TBI3"
                             }
                         ]
+                    }
+                }
+            },
+            {
+                "w": 23,
+                "h": 10,
+                "x": 0,
+                "y": 39,
+                "i": "1652184821115",
+                "moved": false,
+                "static": false,
+                "component": {
+                    "id": 5,
+                    "name": "Table",
+                    "props": {
+                        "colValue": "12",
+                        "tableHeader": "Business Expenses | Total Expenses | Total disallowable",
+                        "tableContent": [
+                            {
+                                "value": "Construction Industry | #TE2 | #TD2"
+                            },
+                            {
+                                "value": "Wages, Salaries | #TE3 | #TD3"
+                            },
+                            {
+                                "value": "Car,Van and travel expenses | #TE4 | #TD4"
+                            },
+                            {
+                                "value": "Rent , power costs | #TE5 | #TD5"
+                            },
+                            {
+                                "value": "Phone, fax, office costs | #TE6 | #TD6"
+                            },
+                            {
+                                "value": "Total expenses | #TE7 | #TD7"
+                            }
+                        ]
+                    }
+                }
+            },
+            {
+                "w": 23,
+                "h": 10,
+                "x": 0,
+                "y": 51,
+                "i": "1652184903581",
+                "moved": false,
+                "static": false,
+                "component": {
+                    "id": 5,
+                    "name": "Table",
+                    "props": {
+                        "colValue": "12",
+                        "tableHeader": "Net Profit or loss |",
+                        "tableContent": [
+                            {
+                                "value": "Total net Profit  | #TNP"
+                            }
+                        ]
+                    }
+                }
+            },
+            {
+                "w": 14,
+                "h": 11,
+                "x": 9,
+                "y": 61,
+                "i": "1652178353111",
+                "moved": false,
+                "static": false,
+                "component": {
+                    "id": 6,
+                    "name": "Button",
+                    "props": {
+                        "iValue": "Save",
+                        "colValue": "12",
+                        "buttonType": "primary",
+                        "float" : "right"
                     }
                 }
             }

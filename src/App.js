@@ -13,7 +13,7 @@ function App() {
   return (
     <Router>
       <div>
-        <nav className="navbar navbar-expand-lg navbar-light bg-light fixed-top">
+        <nav className="navbar navbar-expand-lg navbar-light bg-light">
           <div className="container">
             <Link className="navbar-brand btn" to="/">
               Home
@@ -21,7 +21,7 @@ function App() {
           </div>
         </nav>
 
-        <div className="mt-5 pt-5 container">
+        <div className="container">
           <Switch>
             <Route path="/configuration/:id" component={ConfigurationPage} />
             <Route path="/reportDisplay" component={DisplayReport} />

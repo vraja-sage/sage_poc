@@ -1,5 +1,5 @@
 import { find as _find } from "lodash";
-import React, { useCallback, useState } from "react";
+import React, { useCallback, useState, useEffect } from "react";
 import { Layout, Responsive, WidthProvider } from "react-grid-layout";
 import Dialog from "carbon-react/lib/components/dialog";
 import Typography from "carbon-react/lib/components/typography";
@@ -39,8 +39,8 @@ const ConfigurationPage = () => {
   const [isCompoOpen, setIsCompoOpen] = useState(false);
   const [preInput, setPreInput] = useState({});
   const [fields, setFields] = useState([{ value: null }]);
-  const [tableHeader, setTableHeader] = useState("");
-  const [tableColValue, setTableColValue] = useState("");
+  const [tableData, setTableData] = useState({});
+  const [ isShowField, setIsShowField] = useState(false);
   let cName = (component && component.name) || "";
 
   const mapLayout = useCallback(
@@ -64,6 +64,11 @@ const ConfigurationPage = () => {
     } else{
       comp = { ...component, props : { [e.target.name] : e.target.value }};
     }
+    if(e.target.name === "cardMethod") {
+        let isShowFieldshow = e.target.value === "api" ? false : true;
+        setIsShowField(isShowFieldshow);
+        console.info("e.target.value",e.target.value);
+    }
     setComponent(comp);
   }
   const onDropEle = (layouts, item, e, compAdd) => {
@@ -74,7 +79,8 @@ const ConfigurationPage = () => {
   const onSaveInput = () => {
     const {  layouts, item, e, compAdd } = preInput;
     if(cName === "Table") {
-      let comp = { ...component, props : { "colValue" : tableColValue, "tableHeader" : tableHeader, "tableContent" : fields }};
+      const { colValue, tableMethod, iValue } = tableData;
+      let comp = { ...component, props : { tableMethod, "colValue" : colValue, "tableHeader" : iValue, "tableContent" : fields }};
       setlayout((prev) =>
       mapLayout(prev, layouts).concat({
         ...item,
@@ -84,6 +90,8 @@ const ConfigurationPage = () => {
       })
     );
       setIsCompoOpen(false);
+      setTableData({});
+      setFields([{ value: null }]);
     } else {
       setlayout((prev) =>
         mapLayout(prev, layouts).concat({
@@ -94,6 +102,7 @@ const ConfigurationPage = () => {
         })
       );
       setIsCompoOpen(false);
+      setIsShowField(false);
     }
   }
 
@@ -127,10 +136,12 @@ const ConfigurationPage = () => {
   }
 
   function handleChange(i, event) {
-    if(i == "colValue") {
-      setTableColValue(event.target.value);
-    }else if(i == "TH") {
-      setTableHeader(event.target.value);
+    if(i == "colValue" || i == "TH" || i == "TM") {
+      const newValues = {
+        ...tableData,
+        [event.target.name]: event.target.value
+      } 
+      setTableData(newValues);
     } else {
       const values = [...fields];
       values[i].value = event.target.value;
@@ -165,7 +176,7 @@ const ConfigurationPage = () => {
     } 
    
   } 
-
+  let { tableMethod, iValue, colValue } = tableData;
   return (
     <div className="row justify-content-between">
       <div className="col-2 p-0">
@@ -231,13 +242,20 @@ const ConfigurationPage = () => {
                   Save
                 </Button>}>
               {cName != "Table" && <>
-              <Textbox label="Placeholder Value" name="iValue" onChange={(e) => updateInputValue(e)} />
               <FilterableSelect name="colValue" label="Column Display" onChange={updateInputValue}>
                 <Option text="4" value="4" />
                 <Option text="6" value="6" />
                 <Option text="8" value="8" />
                 <Option text="12" value="12" />
               </FilterableSelect>
+              {cName === "Card" && <>
+                <FilterableSelect name="cardMethod" label="Which method you want ?" onChange={ updateInputValue}>
+                    <Option text="Dynamic From API" value="api" />
+                    <Option text="Static With Dynamic From API" value="staticapi" />
+                </FilterableSelect>
+              </>}
+              {cName === "Card" && isShowField === true && <Textbox label="Placeholder Value" name="iValue" onChange={(e) => updateInputValue(e)} />}
+              {cName != "Card" && <Textbox label="Placeholder Value" name="iValue" onChange={(e) => updateInputValue(e)} />}
               </>
               }
               {cName == "Button" && <> 
@@ -250,16 +268,21 @@ const ConfigurationPage = () => {
               </>}
               {cName == "Table" && <>
                 <>
-                <Heading title="Table Header" divider={false} />
-                <Textbox name="iValue" onChange={(e) => handleChange("TH" , e)} />
-                <FilterableSelect name="colValue" label="Column Display" onChange={(e) => handleChange("colValue" , e)}>
+                <FilterableSelect  name="colValue" label="Column Display" onChange={(e) => handleChange("colValue" , e)}>
                   <Option text="4" value="4" />
                   <Option text="6" value="6" />
                   <Option text="8" value="8" />
                   <Option text="12" value="12" />
                 </FilterableSelect>
+                <FilterableSelect name="tableMethod" label="Which method you want ?" onChange={(e) => handleChange("TM" , e)}>
+                  <Option text="Dynamic From API" value="api" />
+                  <Option text="Static With Dynamic From API" value="staticapi" />
+                </FilterableSelect>
+                {tableMethod === "staticapi" && <> <Heading title="Table Header" divider={false} />
+                <Textbox name="iValue" value={iValue} onChange={(e) => handleChange("TH" , e)} /></>}
                 </>
-                <>
+                
+                {tableMethod === "staticapi" && <>
                 <Heading title="Table Content" divider={false} />
                 {fields.map((field, idx) => {
                   return (
@@ -277,7 +300,7 @@ const ConfigurationPage = () => {
                 <Button buttonType="primary" onClick={() => handleAdd()} iconType="add" size="small" ml={2}>
                     Add 
                 </Button>
-                </>
+                </>}
               </>}
             </Form>
           </Dialog>
