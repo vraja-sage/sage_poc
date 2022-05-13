@@ -90,7 +90,6 @@ const DisplayReport = () => {
   };
 
   const handleOpen = async (propsData) => {
-     console.info("propsData",propsData)
     if(!propsData) return null;
     let { onClickProp , layoutId, category} = propsData; 
     if(onClickProp != "displayDetails" && !layoutId) return null;
@@ -98,7 +97,6 @@ const DisplayReport = () => {
     setIsOpen(true);
     //setPageIndex(0);
     setLayoutId(layoutId);
-    console.info("propsDatassssssssssss")
     await axios.get(`https://627a2ffe73bad506858431bb.mockapi.io/api/v1/getInvoiceData`)
     .then(res => {
       if(category) {
@@ -114,10 +112,8 @@ const DisplayReport = () => {
   };
 
   const getCompLayout = () => {
-    console.info(layoutId,"layoutData",layoutData);
     if(layoutData.length > 0){
       const rowLayoutData = layoutData.filter((row) => row.id == layoutId);
-      console.info("rowLayoutData",rowLayoutData);
       if(rowLayoutData.length > 0){
         isOpen == false && setComponentLayout(rowLayoutData[0].componentLayout);
         isOpen == true && setSubLayoutData(rowLayoutData[0].componentLayout);
