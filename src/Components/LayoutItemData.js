@@ -11,6 +11,7 @@ import Typography, {
   ListItem,
 } from "carbon-react/lib/components/typography";
 
+
 const LayoutItemData = ({ getLayoutcol, componentLayout, apiResponse, handleOpen }) => {
 
   const doBtnAction = (hrefLink) => {
@@ -60,15 +61,27 @@ const LayoutItemData = ({ getLayoutcol, componentLayout, apiResponse, handleOpen
     return iValue;
   }
   
+  const getCardApiData = (cardData, cardPosition) => {
+    console.info(cardData,"cardDataaaaaaaaaaaaaaa",cardPosition)
+    if(cardPosition === "Left") {
+      return (<Dl ml="10px" dtTextAlign="left" asSingleColumn>{Object.values(cardData[0]).map((row) => <Dt>{row} </Dt> )}</Dl>);
+    } else {
+      return (<Dl ml="10px" dtTextAlign="left" asSingleColumn>{Object.entries(cardData[0]).map((rowVal) => <Dt>{rowVal}  </Dt> )}</Dl>);
+    }
+  }
   const renderRowReport = (componentData) => {
 
     let {name, props } = componentData;
-    let { iValue, tableHeader, tableContent, colValue, tableMethod } = props;
-    name = tableMethod === "api" ? "TableByAPI" : name;
+    let { iValue, tableHeader, tableContent, colValue, tableMethod, cardMethod, cardPosition } = props;
+    name = (tableMethod === "api" || cardMethod == "api") ? `${name}api` : name;
     let colRowVal = getLayoutcol(parseInt(colValue));
-    let tableHeaderData=[], tableBody=[], argOne = "", argTwo = "", argThree ="", argFour="", tableHeaderVal = [], rowValues=[] ;
+    let tableHeaderData=[], tableBody=[], argOne = "", argTwo = "", argThree ="", argFour="", tableHeaderVal = [], rowValues=[], cardData = "" ;
     iValue = replaceWithAPIRes(iValue);
-    if(name == "TableByAPI" && apiResponse.length > 0){
+    if(name == "Cardapi" && apiResponse.length > 0){
+     
+      cardData = apiResponse[0][`cardData${cardPosition}`];
+      console.info(cardPosition,"apiResponse",apiResponse, "cardData",cardData);
+    }else if(name == "Tableapi" && apiResponse.length > 0){
       tableHeaderData = apiResponse[0].tableHeader;
       tableBody = apiResponse[0].tableBody;
       if(!tableHeaderData) return null;
@@ -116,14 +129,15 @@ const LayoutItemData = ({ getLayoutcol, componentLayout, apiResponse, handleOpen
                   <Typography variant="h2">{argOne}</Typography>
               </GridItem>);
               break;          
-      case "Card" : return (
+      case "Card" :
+      case "Cardapi": return (
         <GridItem {...props.grid} gridColumn={colRowVal}> 
-          <Dl ml="10px" dtTextAlign="left" asSingleColumn>
+          {cardData.length > 0 ? getCardApiData(cardData, cardPosition) : <Dl ml="10px" dtTextAlign="left" asSingleColumn>
               {argOne ? <Dt className="wonder_text">{argOne}</Dt> : null}
               {argTwo ? <Dt>{argTwo} </Dt> : null}
               {argThree ? <Dt>{argThree}</Dt> : null}
                {argFour ? <Dt>{argFour}</Dt> : null}
-          </Dl>
+          </Dl>}
         </GridItem>);
           break;
       case "Button" : return (
@@ -156,7 +170,7 @@ const LayoutItemData = ({ getLayoutcol, componentLayout, apiResponse, handleOpen
         </GridItem>
       );
       break;
-      case "TableByAPI" : return (
+      case "Tableapi" : return (
         <GridItem alignSelf="stretch" justifySelf="stretch" gridColumn={colRowVal}>
             <FlatTable colorTheme="transparent-white">
               <FlatTableHead>
@@ -180,7 +194,7 @@ const LayoutItemData = ({ getLayoutcol, componentLayout, apiResponse, handleOpen
       break;
     }
   }
- // console.info("componentLayout",componentLayout.component)
+  console.info("componentLayout",componentLayout.component)
   return (
     <>
       {componentLayout.component ? <> {renderRowReport(componentLayout.component)}</> : "NO Value given"}

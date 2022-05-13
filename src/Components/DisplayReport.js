@@ -4,11 +4,12 @@ import Button from "carbon-react/lib/components/button";
 import CarbonProvider from "carbon-react/lib/components/carbon-provider";
 // import { Responsive, WidthProvider } from "react-grid-layout";
 import { GridContainer, GridItem } from "carbon-react/lib/components/grid";
-import { Link } from 'react-router-dom';
+// import { Link } from 'react-router-dom';
 import LayoutItemData from './LayoutItemData';
 // import { useAppDispatch, useAppSelector } from "../app/hooks";
 // import { fetchData, selectors } from '../app/reducer';
 // import { APIRes } from "../Config/apiRes";
+import Link from "carbon-react/lib/components/link";
 import axios from 'axios';
 import Heading from "carbon-react/lib/components/heading";
 import DefaultPages, { Page  } from "carbon-react/lib/components/pages";
@@ -22,12 +23,18 @@ const breakpoints = { lg: 1200, md: 996, sm: 768, xs: 480 };
 const DisplayReport = () => {
   const [layoutData, setLayoutData ] = useState("");
   const [apiResponse, setApiResponse] = useState([]);
-  const [subLayoutData, setSubLayoutData ] = useState("");
+
   const [subApiResponse, setSubApiResponse] = useState([]);
   const [isOpen, setIsOpen] = useState(false);
   const [pageIndex, setPageIndex] = useState("");
+  const [componentLayout, setComponentLayout] = useState([]);
+  const [subLayoutData, setSubLayoutData ] = useState([]);
   const [isDisabled, setIsDisabled] = useState(false);
-  let componentLayout = [];
+  let pageurl = new URL(window.location.href);
+  let idValue = pageurl.searchParams.get("mainLayoutId");
+  const [layoutId, setLayoutId] = useState(idValue);
+  //let componentLayout = [];
+
   // const dispatch = useAppDispatch();
 
   // const views = useAppSelector(selectors.getViews);
@@ -50,38 +57,30 @@ const DisplayReport = () => {
     })
   }
   const getLayoutData = () => {
-    axios.get(`https://627a2ffe73bad506858431bb.mockapi.io/api/v1/getLayout`)
-    .then(res => {
-      setLayoutData(res.data)
-    })
-  }
-  useEffect(() => {
-    if(apiResponse.length > 0){
-      getLayoutData();
-    } else {
-      getApiData();
+    try{
+      axios.get(`https://627a2ffe73bad506858431bb.mockapi.io/api/v1/getLayout`)
+      .then(res => {
+        setLayoutData(res.data);
+      });
+    } catch (err) {
+      console.info("error",err);
     }
-
-  },[apiResponse.length]);
-  
+   
+  }
+ 
   let preCol = 1;
   const getLayoutcol = (colVal = 13) => {
     colVal =colVal +1;
     let retVal = `1 / ${colVal}`;
-
-   
     if(colVal < 13) {
       if(preCol != 1) {
         colVal  = 13;
       }
-     
       retVal = `${preCol} / ${colVal}`;
       preCol = colVal == 13 ? 1 : colVal;
-      console.info(preCol,"preCol",colVal,"colVal",retVal)
       return retVal;
     }
     preCol = 1;
-    console.info(preCol,"preCol111111",colVal,"colVal",retVal)
     return retVal;
   }
 
@@ -91,66 +90,70 @@ const DisplayReport = () => {
   };
 
   const handleOpen = async (propsData) => {
-    console.info("propsData",propsData)
+     console.info("propsData",propsData)
+    if(!propsData) return null;
+    let { onClickProp , layoutId, category} = propsData; 
+    if(onClickProp != "displayDetails" && !layoutId) return null;
+
     setIsOpen(true);
-    setPageIndex(0);
-    await axios.get(`https://627a2ffe73bad506858431bb.mockapi.io/api/v1/newLayout`)
-    .then(res => {
-      setSubLayoutData(res.data)
-    });
+    //setPageIndex(0);
+    setLayoutId(layoutId);
+    console.info("propsDatassssssssssss")
     await axios.get(`https://627a2ffe73bad506858431bb.mockapi.io/api/v1/getInvoiceData`)
     .then(res => {
-      setSubApiResponse(res.data);
+      if(category) {
+        const resData = res.data.filter((row) => row.category.trim() == category.trim() );
+        console.info(category,"resData", res.data,"=======", resData);
+        setSubApiResponse(resData);
+      } else{ 
+        setSubApiResponse(res.data);
+      }
+
     });
 
   };
 
-  const handleOnClick = () => {
-    setIsDisabled(true);
-    setPageIndex(pageIndex + 1);
-    setTimeout(() => {
-      setIsDisabled(false);
-    }, 50);
-  };
-
-  const handleBackClick = ev => {
-    setIsDisabled(true);
-    setTimeout(() => {
-      setIsDisabled(false);
-    }, 50);
-
-    if (!isDisabled) {
-      ev.preventDefault();
-      setPageIndex(pageIndex - 1);
+  const getCompLayout = () => {
+    console.info(layoutId,"layoutData",layoutData);
+    if(layoutData.length > 0){
+      const rowLayoutData = layoutData.filter((row) => row.id == layoutId);
+      console.info("rowLayoutData",rowLayoutData);
+      if(rowLayoutData.length > 0){
+        isOpen == false && setComponentLayout(rowLayoutData[0].componentLayout);
+        isOpen == true && setSubLayoutData(rowLayoutData[0].componentLayout);
+      }
     }
-  };
-  if(isOpen) {
-    componentLayout = subLayoutData && subLayoutData[0].componentLayout;
-  } else {
-    componentLayout = layoutData && layoutData[0].componentLayout;
   }
+  
+  useEffect(() => {
+    if(apiResponse.length > 0 && layoutData.length === 0){
+      getLayoutData();
+    } 
+    if(apiResponse.length == 0) {
+      getApiData();
+    }
+    getCompLayout();
 
+  },[apiResponse.length, layoutData.length, subApiResponse.length]);
+  
   return (
     <CarbonProvider>
         {/* <Heading title={name} divider={false} ml="8px"/> */}
         <GridContainer>
             {isOpen === false &&
-              componentLayout && componentLayout.map((componentLayoutData, key) => (
+              componentLayout.length > 0 && componentLayout.map((componentLayoutData, key) => (
                 <>
-                  <LayoutItemData handleOpen={handleOpen} key={key} getLayoutcol={getLayoutcol} componentLayout={componentLayoutData} apiResponse={apiResponse} />
+                  <LayoutItemData handleOpen={handleOpen} isLayout="main" key={key} getLayoutcol={getLayoutcol} componentLayout={componentLayoutData} apiResponse={apiResponse} />
                 </>
               ))
             }
-            {subApiResponse.length > 0 && <>
-            {/* <DefaultPages pageIndex={pageIndex}>
-              <Page title="Sage Report"> */}
-                {componentLayout && componentLayout.map((componentLayoutData, key) => (
+            {isOpen === true && subApiResponse.length > 0 && <>
+                <Link style={{ width : "100px"}} onClick={() => handleCancel()} icon="chevron_left_thick"> Back</Link>
+                {subLayoutData.length > 0 && subLayoutData.map((componentLayoutData, key) => (
                 <>
-                  <LayoutItemData handleOpen={handleOpen} key={key} getLayoutcol={getLayoutcol} componentLayout={componentLayoutData} apiResponse={subApiResponse} />
+                  <LayoutItemData handleOpen={handleOpen} isLayout="subMain" key={key} getLayoutcol={getLayoutcol} componentLayout={componentLayoutData} apiResponse={subApiResponse} />
                 </>
               ))}
-              {/* </Page>
-            </DefaultPages> */}
           </>}
           </GridContainer>
     </CarbonProvider>
