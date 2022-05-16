@@ -51,7 +51,7 @@ const DisplayReport = () => {
   // }, [setHeight]);
 
   const getApiData = () => {
-    axios.get(`https://627a2ffe73bad506858431bb.mockapi.io/api/v1/getResponse`)
+    axios.get(`https://627a2ffe73bad506858431bb.mockapi.io/api/v1/getResponse?category=main_data`)
     .then(res => {
       setApiResponse(res.data);
     })
@@ -97,18 +97,10 @@ const DisplayReport = () => {
     setIsOpen(true);
     //setPageIndex(0);
     setLayoutId(layoutId);
-    await axios.get(`https://627a2ffe73bad506858431bb.mockapi.io/api/v1/getInvoiceData`)
+    await axios.get(`https://627a2ffe73bad506858431bb.mockapi.io/api/v1/getResponse?category=${category}`)
     .then(res => {
-      if(category) {
-        const resData = res.data.filter((row) => row.category.trim() == category.trim() );
-        console.info(category,"resData", res.data,"=======", resData);
-        setSubApiResponse(resData);
-      } else{ 
         setSubApiResponse(res.data);
-      }
-
     });
-
   };
 
   const getCompLayout = () => {
@@ -132,6 +124,7 @@ const DisplayReport = () => {
 
   },[apiResponse.length, layoutData.length, subApiResponse.length]);
   
+  console.info("subApiResponse",subApiResponse);
   return (
     <CarbonProvider>
         {/* <Heading title={name} divider={false} ml="8px"/> */}

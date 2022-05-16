@@ -15,6 +15,7 @@ import { useAppDispatch, useAppSelector } from "../app/hooks";
 import { selectors, setLayoutView } from "../app/reducer";
 import DraggableComponent from "./DraggableComponent";
 import LayoutItemConfig from "./LayoutItemConfig";
+import axios from 'axios';
 
 const ResponsiveReactGridLayout = WidthProvider(Responsive);
 
@@ -41,6 +42,8 @@ const ConfigurationPage = () => {
   const [fields, setFields] = useState([{ value: null }]);
   const [tableData, setTableData] = useState({});
   const [ isShowField, setIsShowField] = useState(false);
+  const [ displayCategory, setDisplayCategory] = useState([]);
+  const [ allCategory, setAllCategory] = useState([]);
   let cName = (component && component.name) || "";
 
   const mapLayout = useCallback(
@@ -57,6 +60,17 @@ const ConfigurationPage = () => {
     setComponent(dragComponent);
   }, []);
 
+  useEffect(() => {
+    try{
+      axios.get(`https://627a2ffe73bad506858431bb.mockapi.io/api/v1/getCategory`)
+      .then(res => {
+        setAllCategory(res.data[0]);
+      });
+    } catch (err) {
+      console.info("error",err);
+    }
+  }, []);
+  
   const updateInputValue = (e) => {
     let comp = component;
     if(component.props && Object.keys(component.props).length > 0 ) {
@@ -64,9 +78,10 @@ const ConfigurationPage = () => {
     } else{
       comp = { ...component, props : { [e.target.name] : e.target.value }};
     }
-    if(e.target.name === "cardMethod") {
+    if(e.target.name === "dataMethod") {
         let isShowFieldshow = e.target.value === "api" ? false : true;
         setIsShowField(isShowFieldshow);
+        getDisplayCategory(comp);
         console.info("e.target.value",e.target.value);
     }
     setComponent(comp);
@@ -76,11 +91,29 @@ const ConfigurationPage = () => {
     setPreInput({ layouts, item, e, compAdd })
   }
 
+  function getPCategory (objData) {
+    let pCat = Object.keys(allCategory);
+    let pCatRow = "";
+    pCat.pop("id");
+    //console.info(allCategory,"pCat",pCat)
+  
+    pCat.forEach((value) => {
+      const isFound = allCategory[value].filter(element => element.name == objData.name );
+      if(isFound.length > 0){
+        pCatRow = value;
+        return;
+      } 
+    });
+    console.info("pCatRow",pCatRow);
+    return pCatRow;
+  }
   const onSaveInput = () => {
     const {  layouts, item, e, compAdd } = preInput;
     if(cName === "Table") {
-      const { colValue, tableMethod, iValue } = tableData;
-      let comp = { ...component, props : { tableMethod, "colValue" : colValue, "tableHeader" : iValue, "tableContent" : fields }};
+      const { iValue } = tableData;
+      const { dataMethod, colValue, dCategory } = component.props || {};
+      let pCategory = (dCategory) ? getPCategory(component.props.dCategory) : "";
+      let comp = { ...component, pCategory, props : { dCategory, dataMethod, "colValue" : colValue, "tableHeader" : iValue, "tableContent" : fields }};
       setlayout((prev) =>
       mapLayout(prev, layouts).concat({
         ...item,
@@ -92,18 +125,22 @@ const ConfigurationPage = () => {
       setIsCompoOpen(false);
       setTableData({});
       setFields([{ value: null }]);
+      setIsShowField(false);
     } else {
+      let pCategory = (component.props && component.props.dCategory) ? getPCategory(component.props.dCategory) : "";
       setlayout((prev) =>
         mapLayout(prev, layouts).concat({
           ...item,
           i: new Date().getTime().toString(),
           component,
-          isDraggable: undefined
+          isDraggable: undefined,
+          pCategory
         })
       );
       setIsCompoOpen(false);
       setIsShowField(false);
     }
+   
   }
 
   const onDrop = useCallback(
@@ -136,7 +173,7 @@ const ConfigurationPage = () => {
   }
 
   function handleChange(i, event) {
-    if(i == "colValue" || i == "TH" || i == "TM") {
+    if(i == "TH") {
       const newValues = {
         ...tableData,
         [event.target.name]: event.target.value
@@ -176,7 +213,53 @@ const ConfigurationPage = () => {
     } 
    
   } 
-  let { tableMethod, iValue, colValue } = tableData;
+  const onCancelOverlay = () => {
+    setIsShowField(false);
+    setIsCompoOpen(false)
+  }
+
+ function getCategory (...arg) {
+    let category = arg.map(row => { 
+      return allCategory[row];
+    });
+    if(category.length > 1) {
+      let mergeCat = [...category[0],...category[1]];
+      setDisplayCategory(mergeCat);
+    } else if(category.length > 0){
+      setDisplayCategory(category[0]);
+    }
+  }
+
+  const getDisplayCategory = (key) => {
+    switch(key.name){
+        case "Table" : 
+          getCategory("Body", "Common");
+          break;
+        case "Card": 
+          getCategory("Container");
+          break;
+        case "Heading":  
+          getCategory("Header");
+          break;
+        case "HeadingWithPill": 
+          getCategory("Header");
+          break;
+        case "SubHeading": 
+          getCategory("Header");
+          break;
+        case "Button": 
+          getCategory("Body");
+          break;
+        case "Link": 
+          getCategory("Summary");
+          break;
+        case "Typography": 
+          getCategory("Summary");
+          break;
+    }
+  }
+
+  let { dataMethod } = component || {};
   return (
     <div className="row justify-content-between">
       <div className="col-2 p-0">
@@ -238,26 +321,25 @@ const ConfigurationPage = () => {
       </div>
       {isCompoOpen && <>
         <Dialog open={true} >
-            <Form stickyFooter={true}  leftSideButtons={<Button onClick={() => setIsCompoOpen(false)}>Cancel</Button>} saveButton={<Button buttonType="primary" onClick={() => onSaveInput()} type="submit">
+            <Typography mb={1} variant="h2">{component.name}</Typography>
+            <Form stickyFooter={true}  leftSideButtons={<Button onClick={() => onCancelOverlay()}>Cancel</Button>} saveButton={<Button buttonType="primary" onClick={() => onSaveInput()} type="submit">
                   Save
                 </Button>}>
-              {cName != "Table" && <>
+             
               <FilterableSelect name="colValue" label="Column Display" onChange={updateInputValue}>
                 <Option text="4" value="4" />
                 <Option text="6" value="6" />
                 <Option text="8" value="8" />
                 <Option text="12" value="12" />
               </FilterableSelect>
-              {cName === "Card" && <>
-                <FilterableSelect name="cardMethod" label="Which method you want ?" onChange={ updateInputValue}>
-                    <Option text="Dynamic From API" value="api" />
-                    <Option text="Static With Dynamic From API" value="staticapi" />
-                </FilterableSelect>
-              </>}
-              {cName === "Card" && isShowField === true && <Textbox label="Placeholder Value" name="iValue" onChange={(e) => updateInputValue(e)} />}
-              {cName != "Card" && <Textbox label="Placeholder Value" name="iValue" onChange={(e) => updateInputValue(e)} />}
-              </>
-              }
+
+              <FilterableSelect name="dataMethod" label="Which method you want ?" onChange={ updateInputValue}>
+                  <Option text="Dynamic From API" value="api" />
+                  <Option text="Static With Dynamic From API" value="staticapi" />
+              </FilterableSelect>
+
+              {isShowField === true && cName != "Table" && <Textbox label="Placeholder Value" name="iValue" onChange={(e) => updateInputValue(e)} />}
+
               {cName == "Button" && <> 
               <FilterableSelect id="controlled" name="buttonType" label="Button Type" onChange={updateInputValue}>
                 <Option text="primary" value="primary" />
@@ -266,23 +348,14 @@ const ConfigurationPage = () => {
                 <Option text="tertiary" value="tertiary" />
               </FilterableSelect>
               </>}
-              {cName == "Table" && <>
-                <>
-                <FilterableSelect  name="colValue" label="Column Display" onChange={(e) => handleChange("colValue" , e)}>
-                  <Option text="4" value="4" />
-                  <Option text="6" value="6" />
-                  <Option text="8" value="8" />
-                  <Option text="12" value="12" />
-                </FilterableSelect>
-                <FilterableSelect name="tableMethod" label="Which method you want ?" onChange={(e) => handleChange("TM" , e)}>
-                  <Option text="Dynamic From API" value="api" />
-                  <Option text="Static With Dynamic From API" value="staticapi" />
-                </FilterableSelect>
-                {tableMethod === "staticapi" && <> <Heading title="Table Header" divider={false} />
-                <Textbox name="iValue" value={iValue} onChange={(e) => handleChange("TH" , e)} /></>}
-                </>
-                
-                {tableMethod === "staticapi" && <>
+              {isShowField === false && <> 
+              <FilterableSelect id="category" name="dCategory" label="Display Data Category" onChange={updateInputValue}>
+                {displayCategory.length > 0 && displayCategory.map(row => <Option text={row.category} value={row} /> )}           
+              </FilterableSelect>
+              </>}
+              {isShowField === true && cName == "Table" && <> 
+                <Heading title="Table Header" divider={false} />
+                <Textbox name="iValue" onChange={(e) => handleChange("TH" , e)} />
                 <Heading title="Table Content" divider={false} />
                 {fields.map((field, idx) => {
                   return (
@@ -297,15 +370,15 @@ const ConfigurationPage = () => {
                       </div>
                   );
                 })}
+
                 <Button buttonType="primary" onClick={() => handleAdd()} iconType="add" size="small" ml={2}>
                     Add 
                 </Button>
-                </>}
               </>}
             </Form>
           </Dialog>
       </>}
-      <div style={{ height : "100px"}}></div>
+      <div className="sage-fotter" style={{ height : "100px"}}></div>
     </div>
   );
 };
