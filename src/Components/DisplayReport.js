@@ -51,10 +51,14 @@ const DisplayReport = () => {
   // }, [setHeight]);
 
   const getApiData = () => {
-    axios.get(`https://627a2ffe73bad506858431bb.mockapi.io/api/v1/getResponse?category=main_data`)
-    .then(res => {
-      setApiResponse(res.data);
-    })
+    try{
+      axios.get(`https://627a2ffe73bad506858431bb.mockapi.io/api/v1/getResponse?category=main_data`)
+      .then(res => {
+        setApiResponse(res.data);
+      })
+    } catch (err) {
+      console.info("error",err);
+    }
   }
   const getLayoutData = () => {
     try{
@@ -91,13 +95,13 @@ const DisplayReport = () => {
 
   const handleOpen = async (propsData) => {
     if(!propsData) return null;
-    let { onClickProp , layoutId, category} = propsData; 
-    if(onClickProp != "displayDetails" && !layoutId) return null;
+    let { layoutId, dataUrl} = propsData; 
+    if(!layoutId && layoutData[0][dataUrl]) return null;
 
     setIsOpen(true);
     //setPageIndex(0);
     setLayoutId(layoutId);
-    await axios.get(`https://627a2ffe73bad506858431bb.mockapi.io/api/v1/getResponse?category=${category}`)
+    await axios.get(layoutData[0][dataUrl])
     .then(res => {
         setSubApiResponse(res.data);
     });
@@ -124,23 +128,22 @@ const DisplayReport = () => {
 
   },[apiResponse.length, layoutData.length, subApiResponse.length]);
   
-  console.info("subApiResponse",subApiResponse);
   return (
     <CarbonProvider>
         {/* <Heading title={name} divider={false} ml="8px"/> */}
         <GridContainer>
             {isOpen === false &&
-              componentLayout.length > 0 && componentLayout.map((componentLayoutData, key) => (
+              Object.keys(componentLayout).length > 0 && Object.keys(componentLayout).map((componentLayoutKey, key) => (
                 <>
-                  <LayoutItemData handleOpen={handleOpen} isLayout="main" key={key} getLayoutcol={getLayoutcol} componentLayout={componentLayoutData} apiResponse={apiResponse} />
+                  <LayoutItemData handleOpen={handleOpen} isLayout="main" key={key} getLayoutcol={getLayoutcol} apiDataType={componentLayoutKey} componentLayout={componentLayout[componentLayoutKey]} apiResponse={apiResponse} />
                 </>
               ))
             }
             {isOpen === true && subApiResponse.length > 0 && <>
                 <Link style={{ width : "100px"}} onClick={() => handleCancel()} icon="chevron_left_thick"> Back</Link>
-                {subLayoutData.length > 0 && subLayoutData.map((componentLayoutData, key) => (
+                {Object.keys(subLayoutData).length > 0 && Object.keys(subLayoutData).map((componentLayoutKey, key) => (
                 <>
-                  <LayoutItemData handleOpen={handleOpen} isLayout="subMain" key={key} getLayoutcol={getLayoutcol} componentLayout={componentLayoutData} apiResponse={subApiResponse} />
+                  <LayoutItemData handleOpen={handleOpen} isLayout="subMain" key={key} getLayoutcol={getLayoutcol} apiDataType={componentLayoutKey}  componentLayout={subLayoutData[componentLayoutKey]} apiResponse={subApiResponse} />
                 </>
               ))}
           </>}

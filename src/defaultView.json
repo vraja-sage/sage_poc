@@ -1,293 +1,177 @@
 [
     {
-     "id": "1",
-     "name": "MainLayout",
-     "componentLayout": [
-      {
-       "w": 7,
-       "h": 4,
-       "x": 0,
-       "y": 0,
-       "i": "1651742759255",
-       "moved": false,
-       "static": false,
-       "component": {
-        "id": 1,
-        "name": "Heading",
-        "props": {
-         "iValue": "Quarter 2"
-        }
-       }
-      },
-      {
-       "w": 9,
-       "h": 5,
-       "x": 0,
-       "y": 4,
-       "i": "1651742779407",
-       "moved": false,
-       "static": false,
-       "component": {
-        "id": 2,
-        "name": "HeadingWithPill",
-        "props": {
-         "iValue": "26 April - 4 July 2022 | In Progress"
-        }
-       }
-      },
-      {
-       "w": 12,
-       "h": 14,
-       "x": 0,
-       "y": 10,
-       "i": "1651742843664",
-       "moved": false,
-       "static": false,
-       "component": {
-        "id": 4,
-        "name": "Card",
-        "props": {
-         "colValue": "6",
-         "iValue": "WonderLand Cakes | National Insurance Number: #NINO | Cash basic | Sole trader",
-         "style": "primary|secondary|"
-        }
-       }
-      },
-      {
-       "w": 12,
-       "h": 14,
-       "x": 12,
-       "y": 10,
-       "i": "1651742973491",
-       "moved": false,
-       "static": false,
-       "component": {
-        "id": 4,
-        "name": "Card",
-        "props": {
-         "colValue": "6",
-         "iValue": "Due in #days days | Submission deadline 4 August 2022",
-         "grid": {
-          "justifySelf": "end",
-          "alignSelf": "end"
-         }
-        }
-       }
-      },
-      {
-       "w": 24,
-       "h": 11,
-       "x": 0,
-       "y": 26,
-       "i": "1652184620346",
-       "moved": false,
-       "static": false,
-       "component": {
-        "id": 5,
-        "name": "Table",
-        "props": {
-         "colValue": "12",
-         "tableHeader": "Business Income | ",
-         "tableContent": [
-          {
-           "value": "Construction Industry | #TBI1"
-          },
-          {
-           "value": "Wages, Salaries | #TBI2"
-          },
-          {
-           "value": "Total net Profit  | #TBI3"
-          }
-         ]
-        }
-       }
-      },
-      {
-       "w": 23,
-       "h": 10,
-       "x": 0,
-       "y": 39,
-       "i": "1652184821115",
-       "moved": false,
-       "static": false,
-       "component": {
-        "id": 5,
-        "name": "Table",
-        "props": {
-         "colValue": "12",
-         "tableMethod": "staticapi",
-         "tableHeader": "Business Expenses | Total Expenses | Total disallowable",
-         "tableContent": [
-          {
-           "value": "Construction Industry | #TE2 | #TD2",
-           "props": {
-            "onClickProp": "displayDetails",
-            "layoutId": 2,
-            "category" : "construction_industry"
-           }
-          },
-          {
-           "value": "Wages, Salaries | #TE3 | #TD3",
-           "props": {
-            "onClickProp": "displayDetails",
-            "layoutId": 2,
-            "category" : "wages_salaries"
-           }
-          },
-          {
-           "value": "Car,Van and travel expenses | #TE4 | #TD4"
-          },
-          {
-           "value": "Rent , power costs | #TE5 | #TD5"
-          },
-          {
-           "value": "Phone, fax, office costs | #TE6 | #TD6"
-          },
-          {
-           "value": "Total expenses | #TE7 | #TD7"
-          }
-         ]
-        }
-       }
-      },
-      {
-       "w": 23,
-       "h": 10,
-       "x": 0,
-       "y": 51,
-       "i": "1652184903581",
-       "moved": false,
-       "static": false,
-       "component": {
-        "id": 5,
-        "name": "Table",
-        "props": {
-         "colValue": "12",
-         "tableHeader": "Net Profit or loss |",
-         "tableContent": [
-          {
-           "value": "Total net Profit  | #TNP"
-          }
-         ]
-        }
-       }
-      },
-      {
-       "w": 14,
-       "h": 11,
-       "x": 9,
-       "y": 61,
-       "i": "1652178353111",
-       "moved": false,
-       "static": false,
-       "component": {
-        "id": 6,
-        "name": "Button",
-        "props": {
-         "iValue": "Save",
-         "colValue": "12",
-         "buttonType": "primary"
-        }
-       }
-      }
-     ]
+        "id": "1",
+        "name": "MainLayout",
+        "componentLayout": {
+            "Heading_1652935656" : {
+                "id": 1,
+                "type": "Heading",
+                "props": {
+                    "value": "Quarter 2"
+                }
+            },
+            "HeadingWithPill_1652935658": {
+                "id": 2,
+                "type": "HeadingWithPill",
+                "props": {
+                    "value": "26 April - 4 July 2022 | In Progress"
+                }
+            },
+            "Card_1652935660": {
+                "id": 4,
+                "type": "Card",
+                "props": {
+                    "colValue": "6",
+                    "value": "WonderLand Cakes | National Insurance Number: #NINO | Cash basic | Sole trader"
+                }
+            },
+            "Card_1652935674": {
+                "id": 4,
+                "type": "Card",
+                "props": {
+                    "colValue": "6",
+                    "value": "Due in #days days | Submission deadline 4 August 2022",
+                    "grid": {
+                        "justifySelf": "end",
+                        "alignSelf": "end"
+                    }
+                }
+            },
+            "Table_1652935684": {
+                "id": 5,
+                "type": "Table",
+                "props": {
+                    "colValue": "12",
+                    "tableHeader": "Business Income | ",
+                    "tableContent": [
+                        {
+                            "value": "Construction Industry | #TBI1"
+                        },
+                        {
+                            "value": "Wages, Salaries | #TBI2"
+                        },
+                        {
+                            "value": "Total net Profit  | #TBI3"
+                        }
+                    ]
+                }
+            },
+            "Table_1652935699": {
+                "id": 5,
+                "type": "Table",
+                "props": {
+                    "colValue": "12",
+                    "tableHeader": "Business Expenses | Total Expenses | Total disallowable",
+                    "tableContent": [
+                        {
+                            "value": "Construction Industry | #TE2 | #TD2",
+                            "props": {
+                                "layoutId": 2,
+                                "dataUrl": "URL_A"
+                            }
+                        },
+                        {
+                            "value": "Wages, Salaries | #TE3 | #TD3",
+                            "props": {
+                                "layoutId": 2,
+                                "dataUrl": "URL_B"
+                            }
+                        },
+                        {
+                            "value": "Car,Van and travel expenses | #TE4 | #TD4"
+                        },
+                        {
+                            "value": "Rent , power costs | #TE5 | #TD5"
+                        },
+                        {
+                            "value": "Phone, fax, office costs | #TE6 | #TD6"
+                        },
+                        {
+                            "value": "Total expenses | #TE7 | #TD7"
+                        }
+                    ]
+                }
+            },
+            "Table_1652935711": {
+                "id": 5,
+                "type": "Table",
+                "props": {
+                    "colValue": "12",
+                    "tableHeader": "Net Profit or loss |",
+                    "tableContent": [
+                        {
+                            "value": "Total net Profit  | #TNP"
+                        }
+                    ]
+                }
+            },
+            "Button_1652935734": {
+                "id": 6,
+                "type": "Button",
+                "props": {
+                    "value": "Save",
+                    "colValue": "12",
+                    "buttonType": "primary",
+                    "size" : "small"
+                }
+            }
+        },
+        "URL_A" : "https://627a2ffe73bad506858431bb.mockapi.io/api/v1/getResponse?category=construction_industry",
+        "URL_B" : "https://627a2ffe73bad506858431bb.mockapi.io/api/v1/getResponse?category=wages_salaries"
     },
     {
-     "id": "2",
-     "name": "SubLayout",
-     "componentLayout": [
-      {
-       "w": 16,
-       "h": 5,
-       "x": 1,
-       "y": 0,
-       "i": "1652334457386",
-       "moved": false,
-       "static": false,
-       "component": {
-        "id": 1,
-        "name": "Heading",
-        "props": {
-         "iValue": "Quarter 1",
-         "colValue": "12"
+        "id": "2",
+        "name": "SubLayout",
+        "componentLayout": {
+            "Heading_1652935701": {
+                "id": 1,
+                "type": "Heading",
+                "props": {
+                    "colValue": "12",
+                    "dataMethod": "api"
+                }
+            },
+            "HeadingWithPill_1652935708": {
+                "id": 2,
+                "type": "HeadingWithPill",
+                "props": {
+                    "colValue": "12",
+                    "dataMethod": "api"
+                }
+            },
+            "Card_1652935711": {
+                "id": 4,
+                "type": "Card",
+                "props": {
+                    "colValue": "6",
+                    "dataMethod": "api"
+                }
+            },
+            "Card_1652935716": {
+                "id": 4,
+                "type": "Card",
+                "props": {
+                    "colValue": "6",
+                    "dataMethod": "api"
+                }
+            },
+            "Table_1652935719": {
+                "id": 5,
+                "type": "Table",
+                "props": {
+                    "dataMethod": "api",
+                    "colValue": "12"
+                }
+            },
+            "Button_1652935721": {
+                "id": 6,
+                "type": "Button",
+                "props": {
+                    "colValue": "12",
+                    "value": "Save",
+                    "buttonType": "primary"
+                }
+            }
         }
-       }
-      },
-      {
-       "w": 17,
-       "h": 5,
-       "x": 1,
-       "y": 5,
-       "i": "1652334463923",
-       "moved": false,
-       "static": false,
-       "component": {
-        "id": 3,
-        "name": "SubHeading",
-        "props": {
-         "iValue": "6 April to 5 July 2024",
-         "colValue": "12"
-        }
-       }
-      },
-      {
-       "w": 13,
-       "h": 11,
-       "x": 1,
-       "y": 11,
-       "i": "1652334494903",
-       "moved": false,
-       "static": false,
-       "component": {
-        "id": 4,
-        "name": "Card",
-        "props": {
-         "colValue": "8",
-         "cardMethod": "api",
-         "cardPosition" : "Left"
-        }
-       }
-      },
-      {
-       "w": 10,
-       "h": 11,
-       "x": 14,
-       "y": 11,
-       "i": "1652334527827",
-       "moved": false,
-       "static": false,
-       "component": {
-        "id": 4,
-        "name": "Card",
-        "props": {
-            "cardMethod": "api",
-            "colValue": "4",
-            "cardPosition" : "Right"
-        }
-       }
-      },
-      {
-       "w": 22,
-       "h": 7,
-       "x": 0,
-       "y": 23,
-       "i": "1652280655984",
-       "moved": false,
-       "static": false,
-       "component": {
-        "id": 5,
-        "name": "Table",
-        "props": {
-         "tableMethod": "api",
-         "colValue": "12",
-         "tableContent": [
-          {
-           "value": null
-          }
-         ]
-        }
-       }
-      }
-     ]
     }
-   ]
+]

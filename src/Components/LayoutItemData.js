@@ -12,7 +12,7 @@ import Typography, {
 } from "carbon-react/lib/components/typography";
 
 
-const LayoutItemData = ({ getLayoutcol, componentLayout, apiResponse, handleOpen }) => {
+const LayoutItemData = ({ apiDataType, getLayoutcol, componentLayout, apiResponse, handleOpen }) => {
 
   const doBtnAction = (hrefLink) => {
     window.open(hrefLink , "_blank");
@@ -32,7 +32,6 @@ const LayoutItemData = ({ getLayoutcol, componentLayout, apiResponse, handleOpen
   //   [], // Tells React to memoize regardless of arguments.
   // );
   const constructTableData = (rowData) => {
-    console.info("rowData",rowData);
     let rowDataVal = rowData && replaceWithAPIRes(rowData.value);
     rowDataVal = rowDataVal.split("|");
     let arrData = rowDataVal && rowDataVal.map(rowContent => (<> 
@@ -62,47 +61,57 @@ const LayoutItemData = ({ getLayoutcol, componentLayout, apiResponse, handleOpen
     return iValue;
   }
   
-  const getCardApiData = (cardData, cardPosition) => {
-    if(cardPosition === "Left") {
-      return (<Dl ml="10px" dtTextAlign="left" asSingleColumn>{Object.values(cardData[0]).map((row) => <Dt>{row} </Dt> )}</Dl>);
-    } else {
-      return (<Dl ml="10px" dtTextAlign="left" asSingleColumn>{Object.entries(cardData[0]).map((rowVal) => <Dt>{rowVal}  </Dt> )}</Dl>);
+  function getPropByString(obj, propString) {
+    if (!propString)
+      return obj;
+  
+    var prop, props = propString.split('.');
+  
+    for (var i = 0, iLen = props.length - 1; i < iLen; i++) {
+      prop = props[i];
+  
+      var candidate = obj[prop];
+      if (candidate !== undefined) {
+        obj = candidate;
+      } else {
+        break;
+      }
     }
+    return obj[props[i]];
   }
-  const getApiDataRow = (pCat, dCat) => {
+
+  const getApiDataRow = () => {
     let rData = [];
-    if(pCat && apiResponse.length > 0) {
+    if(apiDataType && apiResponse.length > 0) {
       const apiRowData = apiResponse[0];
-      const data = apiRowData[pCat].filter((row) => row.category === dCat.category);
-      rData = data;
+      rData = apiRowData[apiDataType];
     }
-    return rData.length > 0 ? rData[0] : [];
+    return rData ? rData : [];
   }
   const renderRowReport = (componentData) => {
 
-    let {name, props, pCategory } = componentData;
-    let { iValue, tableHeader, tableContent, colValue, dataMethod, dCategory } = props;
-    name = (dataMethod === "api") ? `${name}Api` : name;
+    let {type, props } = componentData;
+    let { value, tableHeader, tableContent, colValue, dataMethod } = props;
+    type = (dataMethod === "api") ? `${type}Api` : type;
     let colRowVal = getLayoutcol(parseInt(colValue));
     let tableHeaderData=[], tableBody=[], argOne = "", argTwo = "", argThree ="", argFour="", tableHeaderVal = [], rowValues=[],apiData = "";
-    console.info(apiResponse,"iValue",iValue, "name",name ,"-", dataMethod);
+    // console.info(apiResponse,"iValue",iValue, "name",name ,"-", dataMethod);
     if(dataMethod === "api") {
-      apiData = getApiDataRow(pCategory, dCategory);
-      let { data } = apiData;
-      if(name == "TableApi" && data.tableHeader){
-          tableHeaderData = data.tableHeader;
-          tableBody = data.tableBody;
+      apiData = getApiDataRow();
+      if(type == "TableApi" && apiData.tableHeader){
+          tableHeaderData = apiData.tableHeader;
+          tableBody = apiData.tableBody;
           if(!tableHeaderData) return null;
       } else {
-        iValue = data;
-        rowValues = iValue && iValue.split("|");
+        value = apiData;
+        rowValues = value && value.split("|");
       }
     } else {
-      iValue = replaceWithAPIRes(iValue);
-      if(name == "Table") {
+      value = replaceWithAPIRes(value);
+      if(type == "Table") {
         tableHeaderVal = tableHeader && tableHeader.split("|");
       } else {
-        rowValues = iValue && iValue.split("|");
+        rowValues = value && value.split("|");
       }
     }
     if(rowValues.length > 3 ) {
@@ -121,7 +130,7 @@ const LayoutItemData = ({ getLayoutcol, componentLayout, apiResponse, handleOpen
       argOne = rowValues[0];
     }
 
-    switch (name) {
+    switch (type) {
       case "Heading" : return (
           <GridItem alignSelf="stretch" justifySelf="stretch" gridColumn={colRowVal}>
             <Heading title={argOne} divider={false} ml="8px"/>
@@ -227,10 +236,10 @@ const LayoutItemData = ({ getLayoutcol, componentLayout, apiResponse, handleOpen
       break;
     }
   }
-  // console.info("componentLayout",componentLayout.component)
+
   return (
     <>
-      {componentLayout.component ? <> {renderRowReport(componentLayout.component)}</> : "NO Value given"}
+      {componentLayout.type ? <> {renderRowReport(componentLayout)}</> : "NO Value given"}
     </>
   )
 };

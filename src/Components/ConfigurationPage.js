@@ -95,10 +95,9 @@ const ConfigurationPage = () => {
     let pCat = Object.keys(allCategory);
     let pCatRow = "";
     pCat.pop("id");
-    //console.info(allCategory,"pCat",pCat)
-  
+    console.info(allCategory,"pCat",pCat, "objData", objData)
     pCat.forEach((value) => {
-      const isFound = allCategory[value].filter(element => element.name == objData.name );
+      const isFound = allCategory[value].filter(element => element.category == objData.category );
       if(isFound.length > 0){
         pCatRow = value;
         return;
@@ -111,9 +110,12 @@ const ConfigurationPage = () => {
     const {  layouts, item, e, compAdd } = preInput;
     if(cName === "Table") {
       const { iValue } = tableData;
-      const { dataMethod, colValue, dCategory } = component.props || {};
-      let pCategory = (dCategory) ? getPCategory(component.props.dCategory) : "";
-      let comp = { ...component, pCategory, props : { dCategory, dataMethod, "colValue" : colValue, "tableHeader" : iValue, "tableContent" : fields }};
+      let { dataMethod, colValue, dCategory } = component.props || {};
+      if(dCategory){
+        let pCategory = getPCategory(dCategory);
+        dCategory = pCategory.concat(".", dCategory.category);
+      }
+      let comp = { ...component, props : { dCategory, dataMethod, "colValue" : colValue, "tableHeader" : iValue, "tableContent" : fields }};
       setlayout((prev) =>
       mapLayout(prev, layouts).concat({
         ...item,
@@ -127,14 +129,16 @@ const ConfigurationPage = () => {
       setFields([{ value: null }]);
       setIsShowField(false);
     } else {
-      let pCategory = (component.props && component.props.dCategory) ? getPCategory(component.props.dCategory) : "";
+      if((component.props && component.props.dCategory)){
+        let pCategory = getPCategory(component.props.dCategory);
+        component.props.dCategory = pCategory.concat(".", component.props.dCategory.category);
+      }
       setlayout((prev) =>
         mapLayout(prev, layouts).concat({
           ...item,
           i: new Date().getTime().toString(),
           component,
-          isDraggable: undefined,
-          pCategory
+          isDraggable: undefined
         })
       );
       setIsCompoOpen(false);
