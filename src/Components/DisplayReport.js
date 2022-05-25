@@ -93,18 +93,20 @@ const DisplayReport = () => {
     setPageIndex(0);
   };
 
-  const handleOpen = async (propsData) => {
+  const handleOpen = async (propsData, index, apiDataType) => {
     if(!propsData) return null;
-    let { layoutId, dataUrl} = propsData; 
-    if(!layoutId && layoutData[0][dataUrl]) return null;
+    let { layoutId } = propsData; 
+    if(!layoutId) return null;
 
     setIsOpen(true);
     //setPageIndex(0);
+    const getDataUrl = apiResponse[0][apiDataType][index]; 
+    console.info(getDataUrl,"getDataUrl.dataUrl",getDataUrl.data_url)
     setLayoutId(layoutId);
-    await axios.get(layoutData[0][dataUrl])
-    .then(res => {
-        setSubApiResponse(res.data);
-    });
+      await axios.get(getDataUrl.data_url)
+      .then(res => {
+          setSubApiResponse(res.data);
+      });
   };
 
   const getCompLayout = () => {

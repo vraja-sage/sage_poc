@@ -31,34 +31,34 @@ const LayoutItemData = ({ apiDataType, getLayoutcol, componentLayout, apiRespons
   //   },
   //   [], // Tells React to memoize regardless of arguments.
   // );
-  const constructTableData = (rowData) => {
-    let rowDataVal = rowData && replaceWithAPIRes(rowData.value);
-    rowDataVal = rowDataVal.split("|");
-    let arrData = rowDataVal && rowDataVal.map(rowContent => (<> 
-        
-          <FlatTableCell>{rowContent} </FlatTableCell>
- 
-    </> ));
-    return (<FlatTableRow onClick={() => handleOpen(rowData.props)} >{arrData}</FlatTableRow>);
+  const constructTableData = (rowData, index) => {
+    let arrData = rowData.value && rowData.value.map((rowContent) => {
+      let rowDataVal = rowContent && replaceWithAPIRes(rowContent);
+      return (<> 
+          <FlatTableCell>{rowDataVal} </FlatTableCell>
+    </> )
+    
+  });
+    return (<FlatTableRow onClick={() => handleOpen(rowData.props, index, apiDataType)} >{arrData}</FlatTableRow>);
   }
 
   const constructTableObjData = (rowDataVal) => {
 
-    let arrData = Object.values(rowDataVal).map(rowContent => (<> 
+    let arrData = rowDataVal.value.map(rowContent => (<> 
         
-          <FlatTableCell>{rowContent} </FlatTableCell>
+          <FlatTableCell>{replaceWithAPIRes(rowContent)} </FlatTableCell>
  
     </> ));
     return (<FlatTableRow >{arrData}</FlatTableRow>);
   }
 
-  const replaceWithAPIRes = (iValue) => {
-    if(iValue && apiResponse.length > 0) {
-      for (let x of Object.entries(apiResponse[0].staticData)) {
-        iValue = iValue.replace( `#${x[0]}` , x[1] );
-      }
+  const replaceWithAPIRes = (data) => {
+    if(data && apiResponse.length > 0) {
+        for (let x of Object.entries(apiResponse[0].staticData)) {
+          data = data.replace( `#${x[0]}` , x[1] );
+        }
     }
-    return iValue;
+    return data;
   }
   
   function getPropByString(obj, propString) {
@@ -91,101 +91,84 @@ const LayoutItemData = ({ apiDataType, getLayoutcol, componentLayout, apiRespons
   const renderRowReport = (componentData) => {
 
     let {type, props } = componentData;
-    let { value, tableHeader, tableContent, colValue, dataMethod } = props;
+    let { data, tableHeader, tableContent, colValue, dataMethod } = props;
     type = (dataMethod === "api") ? `${type}Api` : type;
     let colRowVal = getLayoutcol(parseInt(colValue));
-    let tableHeaderData=[], tableBody=[], argOne = "", argTwo = "", argThree ="", argFour="", tableHeaderVal = [], rowValues=[],apiData = "";
+    let tableHeaderData=[], tableBody=[], argOne = "", argTwo = "", argThree ="", argFour="", tableHeaderVal = [], rowValues={},apiData = "";
     // console.info(apiResponse,"iValue",iValue, "name",name ,"-", dataMethod);
     if(dataMethod === "api") {
       apiData = getApiDataRow();
+      console.info("apiData",apiData);
       if(type == "TableApi" && apiData.tableHeader){
-          tableHeaderData = apiData.tableHeader;
+          tableHeaderVal = apiData.tableHeader;
           tableBody = apiData.tableBody;
           if(!tableHeaderData) return null;
       } else {
-        value = apiData;
-        rowValues = value && value.split("|");
+        rowValues = apiData;
+        // rowValues = value && value.split("|");
       }
     } else {
-      value = replaceWithAPIRes(value);
       if(type == "Table") {
-        tableHeaderVal = tableHeader && tableHeader.split("|");
-      } else {
-        rowValues = value && value.split("|");
+        tableHeaderVal = tableHeader;
+        tableBody = tableContent;
       }
-    }
-    if(rowValues.length > 3 ) {
-      argOne = rowValues[0];
-      argTwo = rowValues[1];
-      argThree = rowValues[2];
-      argFour = rowValues[3];
-    } else if(rowValues.length > 2 ) {
-      argOne = rowValues[0];
-      argTwo = rowValues[1];
-      argThree = rowValues[2];
-    } else if(rowValues.length > 1 ) {
-      argOne = rowValues[0];
-      argTwo = rowValues[1];
-    } else {
-      argOne = rowValues[0];
+      rowValues = data;
     }
 
+    console.info(rowValues, "rowValues","=-=",type);
     switch (type) {
-      case "Heading" : return (
-          <GridItem alignSelf="stretch" justifySelf="stretch" gridColumn={colRowVal}>
-            <Heading title={argOne} divider={false} ml="8px"/>
-          </GridItem>);
-          break;
-      case "HeadingApi" : return (
+      case "Heading" : 
+      case "HeadingApi":
+        {
+            let header = typeof rowValues === "string" ? rowValues : rowValues.header ;
+            return (
             <GridItem alignSelf="stretch" justifySelf="stretch" gridColumn={colRowVal}>
-              <Heading title={argOne} divider={false} ml="8px"/>
+            <Heading title={header} divider={false} ml="8px"/>
+            </GridItem>);
+        }
+        break; 
+      case "HeadingWithPill" :
+      case "HeadingWithPillApi" :
+        {  
+            let { header, pills } = rowValues;
+            return (
+            <GridItem alignSelf="stretch" justifySelf="stretch" gridColumn={colRowVal}>
+            <Heading title={header} divider={false} ml="8px" pills={pills ? <Pill>{pills}</Pill> : null}/>
+            </GridItem>);
+        }
+        break;   
+      case "SubHeading" : 
+      case "SubHeadingApi" :
+            return (
+            <GridItem alignSelf="stretch" justifySelf="stretch" gridColumn={colRowVal}>
+                <Typography ml="1px" variant="h2">{rowValues}</Typography>
             </GridItem>);
             break;    
-      case "HeadingWithPill" : return (
-            <GridItem alignSelf="stretch" justifySelf="stretch" gridColumn={colRowVal}>
-              <Heading title={argOne} divider={false} ml="8px" pills={<Pill>{argTwo}</Pill>}/>
-            </GridItem>);
-            break;
-      case "HeadingWithPillApi" : return (
-            <GridItem alignSelf="stretch" justifySelf="stretch" gridColumn={colRowVal}>
-              <Heading title={argOne} divider={false} ml="8px" pills={argTwo? <Pill>{argTwo}</Pill> : null}/>
-            </GridItem>);
-            break;      
-      case "SubHeading" : return (
-            <GridItem alignSelf="stretch" justifySelf="stretch" gridColumn={colRowVal}>
-                <Typography ml="1px" variant="h2">{argOne}</Typography>
-            </GridItem>);
-            break;  
-      case "SubHeadingApi" : return (
-            <GridItem alignSelf="stretch" justifySelf="stretch" gridColumn={colRowVal}>
-                <Typography ml="1px" variant="h2">{argOne}</Typography>
-            </GridItem>);
-            break;    
-      case "Typography" : return (
+      case "Typography" :
+        case "TypographyApi" :  
+            return (
               <GridItem alignSelf="stretch" justifySelf="stretch" gridColumn={colRowVal}> 
-                  <Typography variant="h2">{argOne}</Typography>
+                  <Typography variant="h2">{rowValues}</Typography>
               </GridItem>);
-              break; 
-      case "TypographyApi" : return (
-              <GridItem alignSelf="stretch" justifySelf="stretch" gridColumn={colRowVal}> 
-                  <Typography variant="h2">{argOne}</Typography>
-              </GridItem>);
-              break;                  
+              break;                 
       case "Card" :
-      case "CardApi": return (
+      case "CardApi": {
+        let { header, listOne, listTwo, listThree} = rowValues;
+        return (
         <GridItem {...props.grid} gridColumn={colRowVal}> 
           <Dl ml="10px" dtTextAlign="left" asSingleColumn>
-              {argOne ? <Dt className="wonder_text">{argOne}</Dt> : null}
-              {argTwo ? <Dt>{argTwo} </Dt> : null}
-              {argThree ? <Dt>{argThree}</Dt> : null}
-               {argFour ? <Dt>{argFour}</Dt> : null}
+              {header ? <Dt className="wonder_text">{replaceWithAPIRes(header)}</Dt> : null}
+              {listOne ? <Dt>{replaceWithAPIRes(listOne)} </Dt> : null}
+              {listTwo ? <Dt>{replaceWithAPIRes(listTwo)}</Dt> : null}
+               {listThree ? <Dt>{replaceWithAPIRes(listThree)}</Dt> : null}
           </Dl>
         </GridItem>);
+      }
           break;
       case "Button" : return (
         <GridItem alignSelf="end" justifySelf="end" gridColumn={colRowVal}>
-          <Button {...props} onClick={() => doBtnAction(argTwo)} className="bottom_btn">
-              {argOne}
+          <Button {...props} onClick={() => doBtnAction(rowValues)} className="bottom_btn">
+              {rowValues}
           </Button>
         </GridItem>
       );
@@ -195,16 +178,16 @@ const LayoutItemData = ({ apiDataType, getLayoutcol, componentLayout, apiRespons
             <FlatTable colorTheme="transparent-white">
               <FlatTableHead>
                 <FlatTableRow>
-                  {tableHeaderVal && tableHeaderVal.map(rowHeader => (
+                  {tableHeaderVal.length > 0 && tableHeaderVal.map(rowHeader => (
                       <>
-                        <FlatTableHeader>{rowHeader}</FlatTableHeader>
+                        <FlatTableHeader>{rowHeader.label}</FlatTableHeader>
                       </>
                   ))}
                 </FlatTableRow>
               </FlatTableHead>
               <FlatTableBody>
-                  {tableContent && tableContent.map((row, index) => {
-                    return constructTableData(row);
+                  {tableBody.length > 0 && tableBody.map((row, index) => {
+                    return constructTableData(row, index);
                   }
                   )}
               </FlatTableBody>
@@ -217,15 +200,15 @@ const LayoutItemData = ({ apiDataType, getLayoutcol, componentLayout, apiRespons
             <FlatTable colorTheme="transparent-white">
               <FlatTableHead>
                 <FlatTableRow>
-                  {tableHeaderData && tableHeaderData.map(rowHeader => (
+                  {tableHeaderVal.length >0 && tableHeaderVal.map(rowHeader => (
                       <>
-                        <FlatTableHeader>{rowHeader}</FlatTableHeader>
+                        <FlatTableHeader>{rowHeader.label}</FlatTableHeader>
                       </>
                   ))}
                 </FlatTableRow>
               </FlatTableHead>
               <FlatTableBody>
-                  {tableBody && tableBody.map((row) => {
+                  {tableBody.length >0 && tableBody.map((row) => {
                     return constructTableObjData(row);
                   }
                   )}
