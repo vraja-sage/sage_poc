@@ -1,24 +1,9 @@
-import React, { useCallback, useMemo, useState, useEffect } from 'react';
-// import { Pencil } from 'react-bootstrap-icons';
-import Button from "carbon-react/lib/components/button";
+import React, { useState, useEffect } from 'react';
 import CarbonProvider from "carbon-react/lib/components/carbon-provider";
-// import { Responsive, WidthProvider } from "react-grid-layout";
-import { GridContainer, GridItem } from "carbon-react/lib/components/grid";
-// import { Link } from 'react-router-dom';
+import { GridContainer } from "carbon-react/lib/components/grid";
 import LayoutItemData from './LayoutItemData';
-// import { useAppDispatch, useAppSelector } from "../app/hooks";
-// import { fetchData, selectors } from '../app/reducer';
-// import { APIRes } from "../Config/apiRes";
 import Link from "carbon-react/lib/components/link";
 import axios from 'axios';
-import Heading from "carbon-react/lib/components/heading";
-import DefaultPages, { Page  } from "carbon-react/lib/components/pages";
-import DialogFullScreen from "carbon-react/lib/components/dialog-full-screen";
-// const ResponsiveReactGridLayout = WidthProvider(Responsive);
-
-const rowHeights = { lg: 5, md: 3, sm: 2, xs: 1 };
-const cols = { lg: 24, md: 24, sm: 24, xs: 24 };
-const breakpoints = { lg: 1200, md: 996, sm: 768, xs: 480 };
 
 const DisplayReport = () => {
   const [layoutData, setLayoutData ] = useState("");
@@ -33,22 +18,6 @@ const DisplayReport = () => {
   let pageurl = new URL(window.location.href);
   let idValue = pageurl.searchParams.get("mainLayoutId");
   const [layoutId, setLayoutId] = useState(idValue);
-  //let componentLayout = [];
-
-  // const dispatch = useAppDispatch();
-
-  // const views = useAppSelector(selectors.getViews);
-  // let pageurl = new URL(window.location.href);
-  // let displayReport = pageurl.searchParams.get("report");
-  // const fetch = useCallback(() => dispatch(fetchData()), [dispatch]);
-
-  // const staticView = useMemo(() => view.componentLayout.map(layout => ({ ...layout, static: true })), [view.componentLayout]);
-
-  // const [height, setHeight] = useState(rowHeights.lg);
-
-  // const onBreakpointChange = useCallback((newBreakpoint) => {
-  //   setHeight(rowHeights[newBreakpoint])
-  // }, [setHeight]);
 
   const getApiData = () => {
     try{

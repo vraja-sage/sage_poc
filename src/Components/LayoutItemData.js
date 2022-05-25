@@ -17,20 +17,7 @@ const LayoutItemData = ({ apiDataType, getLayoutcol, componentLayout, apiRespons
   const doBtnAction = (hrefLink) => {
     window.open(hrefLink , "_blank");
   }
-  // const displayDetails = (propsData) => {
-  //   console.log('Click happened');
-  //   if(propsData && propsData.onClickProp == "displayDetails") {
-  //     handleOpen();
-  //   } else {
 
-  //   }
-  // }
-  // const displayDetails = useCallback(
-  //   () => {
-  //     console.log('Click happened');
-  //   },
-  //   [], // Tells React to memoize regardless of arguments.
-  // );
   const constructTableData = (rowData, index) => {
     let arrData = rowData.value && rowData.value.map((rowContent) => {
       let rowDataVal = rowContent && replaceWithAPIRes(rowContent);
@@ -60,25 +47,6 @@ const LayoutItemData = ({ apiDataType, getLayoutcol, componentLayout, apiRespons
     }
     return data;
   }
-  
-  function getPropByString(obj, propString) {
-    if (!propString)
-      return obj;
-  
-    var prop, props = propString.split('.');
-  
-    for (var i = 0, iLen = props.length - 1; i < iLen; i++) {
-      prop = props[i];
-  
-      var candidate = obj[prop];
-      if (candidate !== undefined) {
-        obj = candidate;
-      } else {
-        break;
-      }
-    }
-    return obj[props[i]];
-  }
 
   const getApiDataRow = () => {
     let rData = [];
@@ -95,7 +63,7 @@ const LayoutItemData = ({ apiDataType, getLayoutcol, componentLayout, apiRespons
     type = (dataMethod === "api") ? `${type}Api` : type;
     let colRowVal = getLayoutcol(parseInt(colValue));
     let tableHeaderData=[], tableBody=[], argOne = "", argTwo = "", argThree ="", argFour="", tableHeaderVal = [], rowValues={},apiData = "";
-    // console.info(apiResponse,"iValue",iValue, "name",name ,"-", dataMethod);
+
     if(dataMethod === "api") {
       apiData = getApiDataRow();
       console.info("apiData",apiData);
@@ -105,7 +73,6 @@ const LayoutItemData = ({ apiDataType, getLayoutcol, componentLayout, apiRespons
           if(!tableHeaderData) return null;
       } else {
         rowValues = apiData;
-        // rowValues = value && value.split("|");
       }
     } else {
       if(type == "Table") {
